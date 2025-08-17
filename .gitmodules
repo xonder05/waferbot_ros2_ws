@@ -1,0 +1,6 @@
+[submodule "ros2_control_diffdrive_encoder_plugin"]
+	path = src/ros2_control_diffdrive_encoder_plugin
+	url = https://github.com/xonder05/ros2_control_diffdrive_encoder_plugin
+[submodule "ydlidar_ros2_driver"]
+	path = src/ydlidar_ros2_driver
+	url = https://github.com/xonder05/ydlidar_ros2_driver
