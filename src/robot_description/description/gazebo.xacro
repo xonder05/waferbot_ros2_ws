@@ -3,16 +3,21 @@
 
     <xacro:macro name="gazebo_plugins">
 
-    <gazebo>
-        <plugin filename="/opt/ros/jazzy/lib/libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-            <parameters>$(find ros2_control_diffdrive_encoder_plugin)/bringup/config/controllers.yaml</parameters>
-            <parameters>$(find ros2_control_diffdrive_encoder_plugin)/bringup/config/controllers_sim.yaml</parameters>
-            <ros>
-                <remapping>/diff_drive_controller/cmd_vel:=/cmd_vel</remapping>
-                <!-- <remapping>/robot_description:=/controller_manager/robot_description</remapping> no longer needed --> 
-            </ros>
-        </plugin>
-    </gazebo>
+    <xacro:if value="$(arg use_sim)">
+
+        <gazebo>
+            <plugin filename="/opt/ros/jazzy/lib/libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                <parameters>$(find ros2_control_diffdrive_encoder_plugin)/bringup/config/controllers.yaml</parameters>
+                <parameters>$(find ros2_control_diffdrive_encoder_plugin)/bringup/config/controllers_sim.yaml</parameters>
+                <ros>
+                    <remapping>/diff_drive_controller/cmd_vel:=/cmd_vel</remapping>
+                    <!-- <remapping>/diff_drive_controller/odom:=/odom</remapping> -->
+                    <!-- <remapping>/robot_description:=/controller_manager/robot_description</remapping> no longer needed --> 
+                </ros>
+            </plugin>
+        </gazebo>
+
+    </xacro:if>
 
     <gazebo reference="lidar">
         <sensor name='gpu_lidar' type='gpu_lidar'>
@@ -46,6 +51,12 @@
                 <visibility_mask>4294967295</visibility_mask>
             </lidar>
         </sensor>
+    </gazebo>
+
+    <gazebo>
+        <plugin name="ignition::gazebo::systems::JointController" filename="libignition-gazebo-joint-controller-system.so">
+            <joint_name>servo_to_ultrasonic_adapter</joint_name>
+        </plugin>
     </gazebo>
 
     <gazebo reference="ultrasonic">
@@ -82,7 +93,7 @@
         </sensor>
     </gazebo>
 
-<gazebo reference="camera">
+    <gazebo reference="camera">
         <sensor name='camera' type='camera'>
             <topic>simulator_camera</topic>
             <update_rate>30</update_rate>

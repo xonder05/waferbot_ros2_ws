@@ -24,7 +24,7 @@ def generate_launch_description():
 
     #xacro robot.xacro -o robot.urdf
     convert_xacro = ExecuteProcess(
-        cmd=['xacro', xacro_model_path, '-o', urdf_model_path],
+        cmd=['xacro', xacro_model_path, 'use_sim:=true', '-o', urdf_model_path],
         output='screen',
     )
 

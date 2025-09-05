@@ -1,9 +1,41 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="ros2_control_diffdrive_plugin">
+<xacro:macro name="ros2_control_diffdrive_plugin">
 
+    <!-- simulation plugin -->
     <xacro:if value="$(arg use_sim)">
+
+        <ros2_control name="ros2_control_diffdrive" type="system">
+            
+            <hardware>
+                <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+            </hardware>
+            
+            <joint name="left_motor_bracket_to_left_wheel">
+                <command_interface name="velocity">
+                    <param name="min">-100</param>
+                    <param name="max">100</param>
+                </command_interface>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+            </joint>
+            
+            <joint name="right_motor_bracket_to_right_wheel">
+                <command_interface name="velocity">
+                    <param name="min">-100</param>
+                    <param name="max">100</param>
+                </command_interface>
+                <state_interface name="position"/>
+                <state_interface name="velocity"/>
+            </joint>
+
+        </ros2_control>
+
+    </xacro:if>
+
+    <!-- real robot plugin -->
+    <xacro:unless value="$(arg use_sim)">
     
         <ros2_control name="ros2_control_diffdrive" type="system">
         
@@ -44,38 +76,8 @@
         
         </ros2_control>
 
-    </xacro:if>
-
-    <xacro:unless value="$(arg use_sim)">
-
-        <ros2_control name="ros2_control_diffdrive" type="system">
-            
-            <hardware>
-                <plugin>gz_ros2_control/GazeboSimSystem</plugin>
-            </hardware>
-            
-            <joint name="left_motor_bracket_to_left_wheel">
-                <command_interface name="velocity">
-                    <param name="min">-100</param>
-                    <param name="max">100</param>
-                </command_interface>
-                <state_interface name="position"/>
-                <state_interface name="velocity"/>
-            </joint>
-            
-            <joint name="right_motor_bracket_to_right_wheel">
-                <command_interface name="velocity">
-                    <param name="min">-100</param>
-                    <param name="max">100</param>
-                </command_interface>
-                <state_interface name="position"/>
-                <state_interface name="velocity"/>
-            </joint>
-
-        </ros2_control>
-
     </xacro:unless>
 
-  </xacro:macro>
+</xacro:macro>
 
 </robot>

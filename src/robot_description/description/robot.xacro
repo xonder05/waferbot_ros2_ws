@@ -6,9 +6,8 @@
     <!-- includes -->
     <xacro:include filename="properties.xacro"/>
     <xacro:include filename="component_macros.xacro"/>
-    <xacro:include filename="sensors_and_acuators.xacro"/>
-    <xacro:include filename="ros2_control.xacro"/>
     <xacro:include filename="frame.xacro"/>
+    <xacro:include filename="ros2_control.xacro"/>
     <xacro:include filename="gazebo.xacro"/>
 
     <!-- robot -->
@@ -19,9 +18,5 @@
     <xacro:ros2_control_diffdrive_plugin/>
 
     <xacro:gazebo_plugins/>
-
-    <!-- <xacro:box_link name="chassis" mass="2" x="${chassis_length}" y="${chassis_width}" z="${chassis_height}" material="black"/>   -->
-    <!-- <xacro:imu/> -->
-    <!-- <xacro:fixed_joint name="chassis" parent="base_link" child="chassis" origin_position="0 0 0.1"/> -->
 
 </robot>
