@@ -19,18 +19,18 @@ def generate_launch_description():
         default_value=os.path.join(
             get_package_share_directory('mapping_and_navigation'),
             'config',
-            'nav2_params.yaml'
+            'mapper_params_online_async.yaml'
         )
     )
 
-    # ros2 launch nav2_bringup navigation_launch.py params_file:=./src/mapping_and_navigation/config/nav2_params.yaml 
-    nav2 = IncludeLaunchDescription(
+    #ros2 launch slam_toolbox online_async_launch.py slam_params_file:=./src/mapping_and_navigation/config/mapper_params_online_async.yaml 
+    slam_toolbox = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
-            FindPackageShare("nav2_bringup"), '/launch', '/navigation_launch.py'
+            FindPackageShare("slam_toolbox"), '/launch', '/online_async_launch.py'
         ]),
         launch_arguments={
             "use_sim_time": LaunchConfiguration('use_sim_time'),
-            'params_file': LaunchConfiguration('slam_params_file')
+            'slam_params_file': LaunchConfiguration('slam_params_file')
         }.items()
     )
 
@@ -38,5 +38,5 @@ def generate_launch_description():
         use_sim_time_arg,
         config_file_arg,
 
-        nav2
+        slam_toolbox
     ])
