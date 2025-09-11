@@ -1,0 +1,37 @@
+servo_node:
+  ros__parameters:
+    pwm_gen_channel: 11 #channel on the PCA9685
+    top_rotation_limit: 410
+    default_position: 307
+    bottom_rotation_limit: 205
+
+camera_node:
+  ros__parameters:
+    video_capture: '/dev/video0'
+    video_resolution_width: 480
+    video_resolution_height: 270
+    video_framerate: 0.05 #sec
+
+ultrasonic_node:
+  ros__parameters:
+    tr_pin: 11 #gpio pins
+    ec_pin: 8
+    ec_timeout: 0.05 #sec
+    obstacle_warning_distance: 0.15 #m
+    side_obstacle_minimum_detection_distance: 0.2 #m
+    side_obstacle_maximum_detection_distance: 0.7 #m
+
+imu_node:
+  ros__parameters:
+    acc_x_offset: -0.165931074 
+    acc_y_offset: 0.201548310205276
+    acc_z_offset: -0.141471371
+    gyro_x_offset: 1.5990274809160256
+    gyro_y_offset: 0.4370078625954107
+    gyro_z_offset: -0.196853435114507
+    acc_x_low_cutoff: 0.1
+    acc_y_low_cutoff: 0.05
+    acc_z_low_cutoff: 0.5
+    gyro_x_low_cutoff: 5.0
+    gyro_y_low_cutoff: 1.0
+    gyro_z_low_cutoff: 5.0
