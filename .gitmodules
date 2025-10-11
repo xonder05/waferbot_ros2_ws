@@ -1,6 +1,9 @@
-[submodule "ros2_control_diffdrive_encoder_plugin"]
-	path = src/ros2_control_diffdrive_encoder_plugin
-	url = https://github.com/xonder05/ros2_control_diffdrive_encoder_plugin
-[submodule "ydlidar_ros2_driver"]
-	path = src/ydlidar_ros2_driver
-	url = https://github.com/xonder05/ydlidar_ros2_driver
+[submodule "src/lib/pca9685_ros2_control"]
+	path = src/lib/pca9685_ros2_control
+	url = https://github.com/mjforan/pca9685_ros2_control.git
+[submodule "src/lib/jga25_371_ros2_control"]
+	path = src/lib/jga25_371_ros2_control
+	url = https://github.com/xonder05/jga25_371_ros2_control.git
+[submodule "src/lib/ydlidar_ros2_driver"]
+	path = src/lib/ydlidar_ros2_driver
+	url = https://github.com/xonder05/ydlidar_ros2_driver.git
