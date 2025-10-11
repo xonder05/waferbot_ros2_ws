@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
+
+    <xacro:arg name="use_sim" default="false"/>
+
+    <!-- includes -->
+    <xacro:include filename="properties.xacro"/>
+    <xacro:include filename="component_macros.xacro"/>
+    <xacro:include filename="physical_components.xacro"/>
+    <xacro:include filename="ros2_control_plugins.xacro"/>
+    <xacro:include filename="gazebo_plugins.xacro"/>
+
+    <!-- robot -->
+    <xacro:coordinate_frames/>
+    <xacro:chassis/>
+
+    <xacro:accurators/>
+    <xacro:ros2_control_diffdrive_plugin/>
+    <xacro:ros2_control_pca9685/>
+    
+    <xacro:sensors/>
+    <xacro:gazebo_plugins/>
+
+</robot>
