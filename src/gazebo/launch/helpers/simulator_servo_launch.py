@@ -7,7 +7,7 @@ import yaml
 def generate_launch_description():
     
     config_file = os.path.join(
-        get_package_share_directory('gazebo_simulator_nodes'),
+        get_package_share_directory('gazebo'),
         'config',
         'config.yaml'
     )
@@ -16,7 +16,7 @@ def generate_launch_description():
         config_contents = yaml.safe_load(f)
 
     simulator_servo = Node(
-        package='gazebo_simulator_nodes',
+        package='gazebo',
         executable='simulator_servo',
         parameters=[config_file]
     )

@@ -15,16 +15,7 @@ def generate_launch_description():
         arguments=["joint_state_broadcaster", "--controller-manager-timeout", "60"],
     )
 
-    # ros2 run ros_gz_bridge parameter_bridge /clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock
-    bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
-        arguments=["/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"
-        ]
-    )
-
     return launch.LaunchDescription([
         diff_drive_controller_spawner,
         joint_state_broadcaster_spawner,
-        bridge,
     ])

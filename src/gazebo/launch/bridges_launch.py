@@ -1,51 +1,79 @@
-from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch_ros.substitutions import FindPackageShare
+import os
+import launch
+from launch_ros.actions import Node
+from ament_index_python.packages import get_package_share_directory
+import yaml
 
 def generate_launch_description():
-
-    camera = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            FindPackageShare("gazebo"), '/launch/bridges', '/simulator_camera_launch.py'
-        ])
+    
+    config_file = os.path.join(
+        get_package_share_directory('gazebo'),
+        'config',
+        'bridges_config.yaml'
     )
 
-    servo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            FindPackageShare("gazebo"), '/launch/bridges', '/simulator_servo_launch.py'
-        ])
+    with open(config_file, 'r') as f:
+        config_contents = yaml.safe_load(f)
+
+    # ros2 run ros_gz_bridge parameter_bridge /clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock
+    clock = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            "/clock" + "@" +
+            "rosgraph_msgs/msg/Clock" + "[" +
+            "gz.msgs.Clock"
+        ]
     )
 
-    ultrasonic = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            FindPackageShare("gazebo"), '/launch/bridges', '/simulator_ultrasonic_launch.py'
-        ])
+    #ros2 run ros_gz_bridge parameter_bridge /simulator_imu@sensor_msgs/msg/Imu@gz.msgs.IMU
+    imu = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            config_contents["imu_bridge"]["ros__parameters"]["topic"] + '@' + 
+            config_contents["imu_bridge"]["ros__parameters"]["ros_message_type"] + '[' + 
+            config_contents["imu_bridge"]["ros__parameters"]["gazebo_message_type"]
+        ]
     )
 
-    imu = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            FindPackageShare("gazebo"), '/launch/bridges', '/simulator_imu_launch.py'
-        ])
+    #ros2 run ros_gz_bridge parameter_bridge /simulator_lidar@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan
+    lidar = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            config_contents["lidar_bridge"]["ros__parameters"]["topic"] + '@' + 
+            config_contents["lidar_bridge"]["ros__parameters"]["ros_message_type"] + '[' + 
+            config_contents["lidar_bridge"]["ros__parameters"]["gazebo_message_type"]
+        ]
     )
 
-    line_following = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            FindPackageShare("gazebo"), '/launch/bridges', '/simulator_line_tracking_launch.py'
-        ])
+    #ros2 run ros_gz_bridge parameter_bridge /simulator_lidar@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan
+    ultrasonic = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            config_contents["ultrasonic_bridge"]["ros__parameters"]["topic"] + '@' + 
+            config_contents["ultrasonic_bridge"]["ros__parameters"]["ros_message_type"] + '[' + 
+            config_contents["ultrasonic_bridge"]["ros__parameters"]["gazebo_message_type"]
+        ]
     )
 
-    lidar = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            FindPackageShare("gazebo"), '/launch/bridges', '/simulator_lidar_launch.py'
-        ])
+    #ros2 run ros_gz_bridge parameter_bridge /camera@sensor_msgs/msg/Image@gz.msgs.Image /camera_info@sensor_msgs/msg/CameraInfo@gz.msgs.CameraInfo
+    camera = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            config_contents["camera_bridge"]["ros__parameters"]["topic"] + '@' + 
+            config_contents["camera_bridge"]["ros__parameters"]["ros_message_type"] + '[' + 
+            config_contents["camera_bridge"]["ros__parameters"]["gazebo_message_type"]
+        ]
     )
 
-    return LaunchDescription([
-        servo,
-        camera,
-        line_following,
-        ultrasonic,
+    return launch.LaunchDescription([
+        clock,
         imu,
         lidar,
+        ultrasonic,
+        camera
     ])

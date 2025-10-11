@@ -32,10 +32,17 @@ def generate_launch_description():
         ])
     )
 
-    # all of the bridges between gazebo and ros2 along with helper conversion nodes
+    # ros_gz_bridges
     bridges = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             FindPackageShare("gazebo"), '/launch', '/bridges_launch.py'
+        ])
+    )
+
+    # helper nodes
+    helpers = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            FindPackageShare("gazebo"), '/launch', '/helpers_launch.py'
         ])
     )
 
@@ -45,5 +52,6 @@ def generate_launch_description():
         gazebo,
         robot_spawn,
         ros2_control,
-        bridges
+        bridges,
+        helpers,
     ])

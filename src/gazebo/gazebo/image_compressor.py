@@ -7,9 +7,9 @@ from sensor_msgs.msg import CompressedImage
 import numpy as np
 import cv2
 
-class SimulatorCamera(Node):
+class ImageCompressor(Node):
     def __init__(self):
-        super().__init__("simulator_camera")
+        super().__init__("image_compressor")
         
         self.declare_parameters(
             namespace='',
@@ -37,6 +37,6 @@ class SimulatorCamera(Node):
 
 def main():
     rclpy.init()
-    node = SimulatorCamera()
+    node = ImageCompressor()
     rclpy.spin(node)
     rclpy.shutdown()
