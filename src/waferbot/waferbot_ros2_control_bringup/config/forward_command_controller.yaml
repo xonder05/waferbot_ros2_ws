@@ -1,0 +1,6 @@
+forward_command_controller:
+  ros__parameters:
+    type: forward_command_controller/ForwardCommandController
+    joints:
+      - servo_to_ultrasonic_adapter
+    interface_name: position
