@@ -5,11 +5,6 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
 
-    # servo = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource([
-    #         FindPackageShare("waferbot_gazebo"), '/launch/bridges', '/simulator_servo_launch.py'
-    #     ])
-    # )
 
     ultrasonic_interpreter = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([

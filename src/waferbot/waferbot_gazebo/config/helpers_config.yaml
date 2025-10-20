@@ -8,8 +8,4 @@ image_compressor:
     gazebo_topic: "/gazebo/camera"
     ros_topic: "/gazebo/camera_compressed"
 
-# simulator_servo:
-#   ros__parameters:
-#     ros_action: "/put_servo_to_pos"
-#     gazebo_topic: "/model/adeept_awr/joint/camera_servo_joint/cmd_vel"
 

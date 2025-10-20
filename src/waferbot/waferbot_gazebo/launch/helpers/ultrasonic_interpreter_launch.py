@@ -7,7 +7,7 @@ def generate_launch_description():
     config_file = os.path.join(
         get_package_share_directory('waferbot_gazebo'),
         'config',
-        'config.yaml'
+        'helpers_config.yaml'
     )
 
     ultrasonic_interpreter = Node(
