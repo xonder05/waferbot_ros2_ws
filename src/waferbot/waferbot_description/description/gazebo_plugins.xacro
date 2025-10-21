@@ -8,23 +8,18 @@
             <plugin filename="/opt/ros/jazzy/lib/libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
                 <parameters>$(find waferbot_gazebo)/config/ros2_control_config.yaml</parameters>
                 <ros>
+                    <namespace>$(arg robot_name)</namespace>
                     <remapping>/diff_drive_controller/cmd_vel:=/cmd_vel</remapping>
                 </ros>
             </plugin>
         </gazebo>
     </xacro:if>
 
-    <gazebo>
-        <plugin filename="libgz-sim-joint-controller-system.so" name="gz::sim::systems::JointController">
-            <joint_name>servo_to_ultrasonic_adapter</joint_name>
-        </plugin>
-    </gazebo>
-
     <gazebo reference="rpi_adapter">
         <sensor name="imu" type="imu">
             <plugin filename="libgz-sim-imu-system.so" name="gz::sim::systems::Imu"></plugin>
 
-            <topic>gazebo/imu</topic>
+            <topic>$(arg robot_name)/imu</topic>
             <gz_frame_id>rpi_adapter</gz_frame_id>
 
             <always_on>1</always_on>
@@ -36,8 +31,8 @@
     <gazebo reference="ultrasonic">
         <sensor name='ultrasonic_sensor' type='gpu_lidar'>
 
-            <topic>gazebo/raw/range</topic>
-            <update_rate>20</update_rate>
+            <topic>$(arg robot_name)/raw/range</topic>
+            <update_rate>10</update_rate>
             <gz_frame_id>ultrasonic</gz_frame_id>
 
             <lidar>
@@ -74,7 +69,7 @@
     <gazebo reference="lidar">
         <sensor name='lidar' type='gpu_lidar'>
 
-            <topic>gazebo/scan</topic>
+            <topic>$(arg robot_name)/scan</topic>
             <update_rate>10</update_rate>
             <gz_frame_id>lidar</gz_frame_id>
             
@@ -112,7 +107,7 @@
     <gazebo reference="camera">
         <sensor name='camera_sensor' type='camera'>
 
-            <topic>gazebo/camera</topic>
+            <topic>$(arg robot_name)/camera</topic>
             <update_rate>30</update_rate>
             <gz_frame_id>camera</gz_frame_id>
 

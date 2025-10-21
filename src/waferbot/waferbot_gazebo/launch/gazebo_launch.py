@@ -4,12 +4,13 @@ from launch import LaunchDescription
 from launch.actions import ExecuteProcess, DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, TextSubstitution
 
+from launch_ros.actions import Node
+
 def generate_launch_description():
     
     world_select_arg = DeclareLaunchArgument('world_select', default_value='wandering')
-    world_select_val = LaunchConfiguration('world_select')
 
-    world_file_name = [world_select_val, TextSubstitution(text="_world.sdf")]
+    world_file_name = [LaunchConfiguration('world_select'), TextSubstitution(text="_world.sdf")]
 
     gazebo_world_path = PathJoinSubstitution([
         get_package_share_directory("waferbot_gazebo"),
@@ -22,7 +23,16 @@ def generate_launch_description():
         output='screen',
     )
 
+    #ros2 run ros_gz_bridge parameter_bridge /clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock
+    clock = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=["/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"]
+    )
+
     return LaunchDescription([
         world_select_arg,
+        
         simulator,
+        clock,
     ])

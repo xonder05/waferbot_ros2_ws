@@ -1,18 +1,15 @@
 from launch import LaunchDescription
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
-
-from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
-
-import os
-from launch import LaunchDescription
-from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
-from launch.conditions import IfCondition
+
+from launch_ros.actions import Node
+
+import os
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
+
+    robot_name_arg = DeclareLaunchArgument('robot_name', default_value="waferbot")
 
     config_file = os.path.join(
         get_package_share_directory('waferbot_ros2_control_bringup'),
@@ -23,6 +20,7 @@ def generate_launch_description():
     diff_drive_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
+        namespace=LaunchConfiguration("robot_name"),
         arguments=[
             'diff_drive_controller',
             "--param-file", config_file,
@@ -31,5 +29,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        robot_name_arg,
+
         diff_drive_controller_spawner,
     ])

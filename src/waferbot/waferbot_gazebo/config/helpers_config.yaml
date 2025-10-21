@@ -1,11 +1,9 @@
-ultrasonic_interpreter:
+/**/ultrasonic_interpreter:
   ros__parameters:
-    gazebo_topic: "/gazebo/raw/range"
-    ros_topic: "/gazebo/range"
+    gazebo_topic: "raw/range"
+    ros_topic: "range"
 
-image_compressor:
+/**/image_compressor:
   ros__parameters:
-    gazebo_topic: "/gazebo/camera"
-    ros_topic: "/gazebo/camera_compressed"
-
-
+    gazebo_topic: "camera"
+    ros_topic: "camera_compressed"

@@ -1,29 +1,19 @@
-# servo_bridge:
-#   ros__parameters:
-#     topic: "/model/adeept_awr/joint/camera_servo_joint/cmd_vel"
-#     ros_message_type: "std_msgs/msg/Float64"
-#     gazebo_message_type: "gz.msgs.Double"
+- topic_name: "imu"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  gz_type_name: "gz.msgs.IMU"
+  direction: GZ_TO_ROS
 
-imu_bridge:
-  ros__parameters:
-    topic: "/gazebo/imu"
-    ros_message_type: "sensor_msgs/msg/Imu"
-    gazebo_message_type: "gz.msgs.IMU"
+- topic_name: "scan"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
 
-lidar_bridge:
-  ros__parameters:
-    topic: "/gazebo/scan"
-    ros_message_type: "sensor_msgs/msg/LaserScan"
-    gazebo_message_type: "gz.msgs.LaserScan"
+- topic_name: "raw/range"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
 
-ultrasonic_bridge:
-  ros__parameters:
-    topic: "/gazebo/raw/range"
-    ros_message_type: "sensor_msgs/msg/LaserScan"
-    gazebo_message_type: "gz.msgs.LaserScan"
-
-camera_bridge:
-  ros__parameters:
-    topic: "/gazebo/camera"
-    ros_message_type: "sensor_msgs/msg/Image"
-    gazebo_message_type: "gz.msgs.Image"
+- topic_name: "camera"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
