@@ -7,10 +7,7 @@ import os
 
 def generate_launch_description():
 
-    use_sim_time_arg = DeclareLaunchArgument(
-        'use_sim_time',
-        default_value='false',
-    )
+    use_sim_time_arg = DeclareLaunchArgument('use_sim_time', default_value='false')
 
     rviz_config_path = os.path.join(
         get_package_share_directory('waferbot_description'),

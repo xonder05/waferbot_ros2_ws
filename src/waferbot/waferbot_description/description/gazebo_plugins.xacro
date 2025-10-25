@@ -19,11 +19,11 @@
         <sensor name="imu" type="imu">
             <plugin filename="libgz-sim-imu-system.so" name="gz::sim::systems::Imu"></plugin>
 
+            <update_rate>10</update_rate>
             <topic>$(arg robot_name)/imu</topic>
-            <gz_frame_id>rpi_adapter</gz_frame_id>
+            <gz_frame_id>$(arg robot_name)/rpi_adapter</gz_frame_id>
 
             <always_on>1</always_on>
-            <update_rate>10</update_rate>
             <visualize>true</visualize>
         </sensor>
     </gazebo>
@@ -31,9 +31,9 @@
     <gazebo reference="ultrasonic">
         <sensor name='ultrasonic_sensor' type='gpu_lidar'>
 
-            <topic>$(arg robot_name)/raw/range</topic>
             <update_rate>10</update_rate>
-            <gz_frame_id>ultrasonic</gz_frame_id>
+            <topic>$(arg robot_name)/raw/range</topic>
+            <gz_frame_id>$(arg robot_name)/ultrasonic</gz_frame_id>
 
             <lidar>
                 <scan>
@@ -69,9 +69,9 @@
     <gazebo reference="lidar">
         <sensor name='lidar' type='gpu_lidar'>
 
-            <topic>$(arg robot_name)/scan</topic>
             <update_rate>10</update_rate>
-            <gz_frame_id>lidar</gz_frame_id>
+            <topic>$(arg robot_name)/scan</topic>
+            <gz_frame_id>$(arg robot_name)/lidar</gz_frame_id>
             
             <lidar>
                 <scan>
@@ -107,9 +107,9 @@
     <gazebo reference="camera">
         <sensor name='camera_sensor' type='camera'>
 
-            <topic>$(arg robot_name)/camera</topic>
             <update_rate>30</update_rate>
-            <gz_frame_id>camera</gz_frame_id>
+            <topic>$(arg robot_name)/camera</topic>
+            <gz_frame_id>$(arg robot_name)/camera</gz_frame_id>
 
             <camera>
                 <horizontal_fov>1.0469999999999999</horizontal_fov>
