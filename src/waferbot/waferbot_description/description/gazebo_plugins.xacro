@@ -15,13 +15,13 @@
         </gazebo>
     </xacro:if>
 
-    <gazebo reference="rpi_adapter">
+    <gazebo reference="imu">
         <sensor name="imu" type="imu">
             <plugin filename="libgz-sim-imu-system.so" name="gz::sim::systems::Imu"></plugin>
 
             <update_rate>10</update_rate>
             <topic>$(arg robot_name)/imu</topic>
-            <gz_frame_id>$(arg robot_name)/rpi_adapter</gz_frame_id>
+            <gz_frame_id>$(arg robot_name)/imu</gz_frame_id>
 
             <always_on>1</always_on>
             <visualize>true</visualize>

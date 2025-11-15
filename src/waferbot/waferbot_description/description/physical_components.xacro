@@ -63,6 +63,14 @@
     <xacro:fixed_joint name="bottom_baseplate_to_rpi_adapter" parent="bottom_baseplate" child="rpi_adapter"
                        origin_position="-0.020 0.020 0.005"/>
 
+    <xacro:box_link name="rpi" mass="0.01" x="0.0565" y="0.0856" z="0.017" material="red"/>
+    <xacro:fixed_joint name="rpi_adapter_to_rpi" parent="rpi_adapter" child="rpi"
+                       origin_position="0.03 -0.01 0.0225"/>
+
+    <xacro:box_link name="robot_hat" mass="0.01" x="0.0565" y="0.0606" z="0.017" material="red"/>
+    <xacro:fixed_joint name="rpi_to_robot_hat" parent="rpi" child="robot_hat"
+                       origin_position="0 -0.0125 0.003"/>
+
     <xacro:mesh_link name="battery" package="waferbot_description" file="description/meshes/orp_batteries.stl"
                      origin_orientation="0 -1.5708 0"/>
     <xacro:fixed_joint name="bottom_baseplate_to_battery" parent="bottom_baseplate" child="battery"
@@ -134,6 +142,10 @@
 
 <!-- gazebo plugins reference these -->
 <xacro:macro name="sensors">
+
+    <xacro:box_link name="imu" mass="0.01" x="0.015" y="0.020" z="0.005" material="blue"/>  
+    <xacro:fixed_joint name="robot_hat_to_imu" parent="robot_hat" child="imu" 
+                    origin_position="-0.005 -0.020 0.010" origin_orientation="0 0 1.5708"/>
 
     <xacro:box_link name="ultrasonic" mass="0.01" x="0.0015" y="0.045" z="0.020" material="blue"/>  
     <xacro:fixed_joint name="ultrasonic_adapter_to_ultrasonic" parent="ultrasonic_adapter" child="ultrasonic" 
