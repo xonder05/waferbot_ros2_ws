@@ -7,7 +7,6 @@
     <xacro:if value="$(arg use_sim)">
 
         <ros2_control name="ros2_control_diffdrive" type="system">
-            
             <hardware>
                 <plugin>gz_ros2_control/GazeboSimSystem</plugin>
             </hardware>
@@ -32,7 +31,6 @@
     <xacro:unless value="$(arg use_sim)">
     
         <ros2_control name="ros2_control_diffdrive" type="system">
-        
             <hardware>
                 <plugin>jga25_371_hardware_interface/DiffDriveHardware</plugin>
             </hardware>
@@ -78,24 +76,46 @@
 <!-- todo: this need to be done for simulator -->
 <xacro:macro name="ros2_control_pca9685">
 
-    <ros2_control name="ros2_control_pca9685" type="system">
-        
-        <hardware>
-            <plugin>pca9685_hardware_interface/Pca9685SystemHardware</plugin>
-        </hardware>
+    <!-- simulation plugin -->
+    <xacro:if value="$(arg use_sim)">
 
-        <joint name="servo_to_ultrasonic_adapter">
-            <command_interface name="position"/>
-            <state_interface name="position"/>
+        <ros2_control name="ros2_control_pca9685" type="system">
+            <hardware>
+                <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+            </hardware>
+            
+            <joint name="servo_to_ultrasonic_adapter">
+                <command_interface name="position"/>
+                <state_interface name="position"/>
+            </joint>
+            
+        </ros2_control>
 
-            <param name="channel">11</param>
-            <param name="pwm_high">2.0</param>
-            <param name="pwm_zero">1.5</param>
-            <param name="pwm_low">1.0</param>
-            <param name="scale">45.0</param>
+    </xacro:if>
 
-        </joint>
-    </ros2_control>
+    <!-- real robot plugin -->
+    <xacro:unless value="$(arg use_sim)">
+
+       <ros2_control name="ros2_control_pca9685" type="system">
+            <hardware>
+                <plugin>pca9685_hardware_interface/Pca9685SystemHardware</plugin>
+            </hardware>
+
+            <joint name="servo_to_ultrasonic_adapter">
+                <command_interface name="position"/>
+                <state_interface name="position"/>
+
+                <param name="channel">11</param>
+                <param name="pwm_high">2.0</param>
+                <param name="pwm_zero">1.5</param>
+                <param name="pwm_low">1.0</param>
+                <param name="scale">45.0</param>
+
+            </joint>
+            
+        </ros2_control>
+
+    </xacro:unless>
 
 </xacro:macro>
 

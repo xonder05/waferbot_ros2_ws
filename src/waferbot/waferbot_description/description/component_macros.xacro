@@ -85,11 +85,11 @@
 
 </xacro:macro>
 
-<xacro:macro name="mesh_link" params="name package file material:=red scale:=0.001 origin_position:='0 0 0' origin_orientation:='0 0 0'">
+<xacro:macro name="mesh_link" params="name package file material:=red scale:=0.001 origin_position:='0 0 0' origin_orientation:='0 0 0' mass:=0.020">
 
     <link name="${name}">
         <inertial>
-            <mass value="10" />
+            <mass value="${mass}" />
             <inertia ixx="0.0" ixy="0.0" ixz="0.0"
                      iyy="0.0" iyz="0.0"
                      izz="0.0" />
@@ -134,14 +134,14 @@
 
 </xacro:macro>
 
-<xacro:macro name="revolute_joint" params="name parent child origin_position:='0 0 0' origin_orientation:='0 0 0' axis='0 0 0' limit_lower:=-3.14, limit_upper:=3.14">
+<xacro:macro name="revolute_joint" params="name parent child origin_position:='0 0 0' origin_orientation:='0 0 0' axis='0 0 0' limit_lower:=-3.14 limit_upper:=3.14 effort:=10 velocity:=3.14">
     
     <joint name="${name}" type="revolute">
         <parent link="${parent}"/>
         <child link="${child}"/>
         <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
         <axis xyz="${axis}"/>
-        <limit lower="${limit_lower}" upper="${limit_upper}" effort="10" velocity="3.14"/>
+        <limit lower="${limit_lower}" upper="${limit_upper}" effort="${effort}" velocity="${velocity}"/>
     </joint>
 
 </xacro:macro>

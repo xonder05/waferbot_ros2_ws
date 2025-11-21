@@ -1,163 +1,154 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
 
-<xacro:macro name="coordinate_frames">
-
-    <link name="base_link"/>
-
-    <link name="base_footprint"/>
-    <xacro:fixed_joint name="base_link_to_base_footprint" parent="base_link" child="base_footprint"/>
-
-</xacro:macro>
-
 <!-- orp baseplates and adapters, all with fixed joints -->
 <xacro:macro name="chassis">
 
     <xacro:mesh_link name="bottom_baseplate" package="waferbot_description" file="description/meshes/orp_baseplate.stl"
-                     origin_orientation="1.5708 0 1.5708"/>
-    <xacro:fixed_joint name="base_link_to_bottom_baseplate" parent="base_link" child="bottom_baseplate" 
+                     mass="0.095" origin_orientation="1.5708 0 1.5708"/>
+    <xacro:fixed_joint name="base_link_to_bottom_baseplate" parent="base_link" child="bottom_baseplate"
                        origin_position="0 0 0"/>
 
     <xacro:mesh_link name="left_motor_bracket" package="waferbot_description" file="description/meshes/orp_jga25-371_motor_adapter.stl"
-                     origin_orientation="-1.5708 0 0"/>
+                     mass="0.008" origin_orientation="-1.5708 0 0"/>
     <xacro:fixed_joint name="bottom_baseplate_to_left_motor_bracket" parent="bottom_baseplate" child="left_motor_bracket"
                        origin_position="-0.020 0.080 0"/>
 
-    <xacro:cylinder_link name="left_motor" mass="20" radius="0.012" length="0.050"
+    <xacro:cylinder_link name="left_motor" mass="0.099" radius="0.012" length="0.050"
                          origin_orientation="1.5708 0 0"/>
     <xacro:fixed_joint name="left_motor_bracket_to_left_motor" parent="left_motor_bracket" child="left_motor"
                        origin_position="0.020 -0.022 -0.020"/>
 
     <xacro:mesh_link name="right_motor_bracket" package="waferbot_description" file="description/meshes/orp_jga25-371_motor_adapter.stl"
-                     origin_orientation="-1.5708 0 3.1415"/>
+                     mass="0.008" origin_orientation="-1.5708 0 3.1415"/>
     <xacro:fixed_joint name="bottom_baseplate_to_right_motor_bracket" parent="bottom_baseplate" child="right_motor_bracket"
                        origin_position="0.020 -0.080 0"/>
 
-    <xacro:cylinder_link name="right_motor" mass="20" radius="0.012" length="0.050"
-                     origin_orientation="1.5708 0 0"/>
+    <xacro:cylinder_link name="right_motor" mass="0.099" radius="0.012" length="0.050"
+                         origin_orientation="1.5708 0 0"/>
     <xacro:fixed_joint name="right_motor_bracket_to_right_motor" parent="right_motor_bracket" child="right_motor"
                        origin_position="-0.020 0.022 -0.020"/>
 
     <xacro:mesh_link name="front_caster_adapter" package="waferbot_description" file="description/meshes/orp_caster_wheel_adapter.stl"
-                     origin_orientation="-1.5708 0 1.5708"/>
+                     mass="0.0075" origin_orientation="-1.5708 0 1.5708"/>
     <xacro:fixed_joint name="bottom_baseplate_to_front_caster_adapter" parent="bottom_baseplate" child="front_caster_adapter"
-                       origin_position="0.080 0 0"/>
+                       origin_position="0.080 0 -0.0025"/>
 
     <xacro:mesh_link name="back_caster_adapter" package="waferbot_description" file="description/meshes/orp_caster_wheel_adapter.stl"
-                     origin_orientation="-1.5708 0 1.5708"/>
+                     mass="0.0075" origin_orientation="-1.5708 0 1.5708"/>
     <xacro:fixed_joint name="bottom_baseplate_to_back_caster_adapter" parent="bottom_baseplate" child="back_caster_adapter"
-                       origin_position="-0.080 0 0"/>
+                       origin_position="-0.080 0 -0.0025"/>
 
     <xacro:mesh_link name="servo_adapter" package="waferbot_description" file="description/meshes/orp_servo_adapter.stl"
-                     origin_orientation="1.5708 0 1.5708"/>
+                     mass="0.003" origin_orientation="1.5708 0 1.5708"/>
     <xacro:fixed_joint name="bottom_baseplate_to_servo_adapter" parent="bottom_baseplate" child="servo_adapter"
                        origin_position="0.100 0 0.0075"/>
 
     <xacro:mesh_link name="camera_adapter" package="waferbot_description" file="description/meshes/orp_camera_adapter.stl"
-                     origin_orientation="1.5708 0 1.5708"/>
+                     mass="0.003" origin_orientation="1.5708 0 1.5708"/>
     <xacro:fixed_joint name="bottom_baseplate_to_camera_adapter" parent="bottom_baseplate" child="camera_adapter"
                        origin_position="0.060 0.040 0.005"/>
 
     <xacro:mesh_link name="rpi_adapter" package="waferbot_description" file="description/meshes/orp_rpi4b_adapter.stl"
-                     origin_orientation="1.5708 0 1.5708"/>
+                     mass="0.007" origin_orientation="1.5708 0 1.5708"/>
     <xacro:fixed_joint name="bottom_baseplate_to_rpi_adapter" parent="bottom_baseplate" child="rpi_adapter"
                        origin_position="-0.020 0.020 0.005"/>
 
-    <xacro:box_link name="rpi" mass="0.01" x="0.0565" y="0.0856" z="0.017" material="red"/>
+    <xacro:box_link name="rpi" mass="0.046" x="0.0565" y="0.0856" z="0.017" material="red"/>
     <xacro:fixed_joint name="rpi_adapter_to_rpi" parent="rpi_adapter" child="rpi"
                        origin_position="0.03 -0.01 0.0225"/>
 
-    <xacro:box_link name="robot_hat" mass="0.01" x="0.0565" y="0.0606" z="0.017" material="red"/>
+    <xacro:box_link name="robot_hat" mass="0.040" x="0.0565" y="0.0606" z="0.017" material="red"/>
     <xacro:fixed_joint name="rpi_to_robot_hat" parent="rpi" child="robot_hat"
                        origin_position="0 -0.0125 0.003"/>
 
     <xacro:mesh_link name="battery" package="waferbot_description" file="description/meshes/orp_batteries.stl"
-                     origin_orientation="0 -1.5708 0"/>
+                     mass="0.258" origin_orientation="0 -1.5708 0"/>
     <xacro:fixed_joint name="bottom_baseplate_to_battery" parent="bottom_baseplate" child="battery"
                        origin_position="-0.100 -0.020 0.005"/>
 
     <xacro:mesh_link name="spacer_1" package="waferbot_description" file="description/meshes/orp_spacer.stl"
-                     origin_orientation="1.5708 0 0"/>
+                     mass="0.006" origin_orientation="1.5708 0 0"/>
     <xacro:fixed_joint name="bottom_baseplate_to_spacer_1" parent="bottom_baseplate" child="spacer_1"
                        origin_position="-0.040 -0.080 0.005"/>
 
     <xacro:mesh_link name="spacer_2" package="waferbot_description" file="description/meshes/orp_spacer.stl"
-                     origin_orientation="1.5708 0 0"/>
+                     mass="0.006" origin_orientation="1.5708 0 0"/>
     <xacro:fixed_joint name="bottom_baseplate_to_spacer_2" parent="bottom_baseplate" child="spacer_2"
                        origin_position="-0.040 0.080 0.005"/>
 
     <xacro:mesh_link name="spacer_3" package="waferbot_description" file="description/meshes/orp_spacer.stl"
-                     origin_orientation="1.5708 0 0"/>
+                     mass="0.006" origin_orientation="1.5708 0 0"/>
     <xacro:fixed_joint name="bottom_baseplate_to_spacer_3" parent="bottom_baseplate" child="spacer_3"
                        origin_position="0.040 0.080 0.005"/>
 
     <xacro:mesh_link name="spacer_4" package="waferbot_description" file="description/meshes/orp_spacer.stl"
-                     origin_orientation="1.5708 0 0"/>
+                     mass="0.006" origin_orientation="1.5708 0 0"/>
     <xacro:fixed_joint name="bottom_baseplate_to_spacer_4" parent="bottom_baseplate" child="spacer_4"
                        origin_position="0.060 -0.080 0.005"/>
 
     <xacro:mesh_link name="top_baseplate" package="waferbot_description" file="description/meshes/orp_baseplate.stl"
-                     origin_orientation="1.5708 0 1.5708"/>
-    <xacro:fixed_joint name="bottom_baseplate_to_top_baseplate" parent="bottom_baseplate" child="top_baseplate" 
+                     mass="0.095" origin_orientation="1.5708 0 1.5708"/>
+    <xacro:fixed_joint name="bottom_baseplate_to_top_baseplate" parent="bottom_baseplate" child="top_baseplate"
                        origin_position="0 0 0.105"/>
 
     <xacro:mesh_link name="lidar_adapter" package="waferbot_description" file="description/meshes/orp_lidar_adapter.stl"
-                     origin_orientation="1.5708 0 3.1415"/>
+                     mass="0.010" origin_orientation="1.5708 0 3.1415"/>
     <xacro:fixed_joint name="top_baseplate_to_lidar_adapter" parent="top_baseplate" child="lidar_adapter"
-                       origin_position="-0.011 0 0.0075"/>
+                       origin_position="-0.020 0.040 0.0075"/>
 
 </xacro:macro>
 
 <!-- continuous or revolut joints, ros2_control uses these -->
 <xacro:macro name="accurators">
 
-    <xacro:cylinder_link name="left_wheel" mass="20" radius="0.0345" length="0.020"
+    <xacro:cylinder_link name="left_wheel" mass="0.035" radius="0.0325" length="0.026"
                          origin_orientation="1.5708 0 0"/>
     <xacro:continuous_joint name="left_motor_bracket_to_left_wheel" parent="left_motor_bracket" child="left_wheel"
                             origin_position="0.020 0.023 -0.020" axis="0 1 0"/>
 
-    <xacro:cylinder_link name="right_wheel" mass="20" radius="0.0345" length="0.020"
+    <xacro:cylinder_link name="right_wheel" mass="0.035" radius="0.0325" length="0.026"
                          origin_orientation="1.5708 0 0"/>
     <xacro:continuous_joint name="right_motor_bracket_to_right_wheel" parent="right_motor_bracket" child="right_wheel"
                             origin_position="-0.020 -0.023 -0.020" axis="0 1 0"/>
 
-    <xacro:ball_link name="front_caster_wheel" mass="1" radius="0.015"/>
+    <xacro:ball_link name="front_caster_wheel" mass="0.010" radius="0.015"/>
     <xacro:fixed_joint name="front_caster_adapter_to_front_caster_wheel" parent="front_caster_adapter" child="front_caster_wheel"
                        origin_position="0 0 -0.035"/>
 
-    <xacro:ball_link name="back_caster_wheel" mass="1" radius="0.015"/>
+    <xacro:ball_link name="back_caster_wheel" mass="0.010" radius="0.015"/>
     <xacro:fixed_joint name="back_caster_adapter_to_back_caster_wheel" parent="back_caster_adapter" child="back_caster_wheel"
                        origin_position="0 0 -0.035"/>
 
-    <xacro:box_link name="servo" mass="0.01" x="0.013" y="0.023" z="0.023" material="blue"/>  
+    <xacro:box_link name="servo" mass="0.0134" x="0.013" y="0.023" z="0.023" material="blue"/>
     <xacro:fixed_joint name="servo_adapter_to_servo" parent="servo_adapter" child="servo"
                        origin_position="-0.011 0 0.012"/>
 
     <xacro:mesh_link name="ultrasonic_adapter" package="waferbot_description" file="description/meshes/servo_to_ultrasonic_adapter.stl"
-                     origin_orientation="1.5708 0 -1.5708"/>
+                     mass="0.0045" origin_orientation="1.5708 0 -1.5708"/>
     <xacro:revolute_joint name="servo_to_ultrasonic_adapter" parent="servo" child="ultrasonic_adapter"
-                          origin_position="0 0 0.017" axis="0 0 1" limit_lower="-3.14" limit_upper="3.14"/>
+                          origin_position="0 0 0.017" axis="0 0 1" limit_lower="-3.14" limit_upper="3.14" velocity="9.52"/>
 
 </xacro:macro>
 
 <!-- gazebo plugins reference these -->
 <xacro:macro name="sensors">
 
-    <xacro:box_link name="imu" mass="0.01" x="0.015" y="0.020" z="0.005" material="blue"/>  
-    <xacro:fixed_joint name="robot_hat_to_imu" parent="robot_hat" child="imu" 
+    <xacro:box_link name="imu" mass="0.002" x="0.015" y="0.020" z="0.005" material="blue"/>
+    <xacro:fixed_joint name="robot_hat_to_imu" parent="robot_hat" child="imu"
                     origin_position="-0.005 -0.020 0.010" origin_orientation="0 0 1.5708"/>
 
-    <xacro:box_link name="ultrasonic" mass="0.01" x="0.0015" y="0.045" z="0.020" material="blue"/>  
-    <xacro:fixed_joint name="ultrasonic_adapter_to_ultrasonic" parent="ultrasonic_adapter" child="ultrasonic" 
+    <xacro:box_link name="ultrasonic" mass="0.010" x="0.0015" y="0.045" z="0.020" material="blue"/>
+    <xacro:fixed_joint name="ultrasonic_adapter_to_ultrasonic" parent="ultrasonic_adapter" child="ultrasonic"
                        origin_position="0.004 0 0.015"/>
 
-    <xacro:cylinder_link name="lidar" mass="0.01" radius="0.031" length="0.02" material="blue"/>    
-    <xacro:fixed_joint name="lidar_to_lidar_adapter" child="lidar" parent="lidar_adapter" 
-                       origin_position="0.010 0 0.040" origin_orientation="0 0 3.14"/>
+    <xacro:cylinder_link name="lidar" mass="0.135" radius="0.031" length="0.02" material="blue"/>
+    <xacro:fixed_joint name="lidar_to_lidar_adapter" child="lidar" parent="lidar_adapter"
+                       origin_position="0.020 -0.040 0.040" origin_orientation="0 0 3.14"/>
 
-    <xacro:box_link name="camera" mass="0.01" x="0.001" y="0.025" z="0.024" material="blue"
+    <xacro:box_link name="camera" mass="0.005" x="0.001" y="0.025" z="0.024" material="blue"
                     origin_orientation="0 0 -0.1745"/> <!-- 10 deg -->
-    <xacro:fixed_joint name="camera_adapter_to_camera" child="camera" parent="camera_adapter" 
+    <xacro:fixed_joint name="camera_adapter_to_camera" child="camera" parent="camera_adapter"
                        origin_position="-0.003 0.020 0.0145"/>
 
 </xacro:macro>
