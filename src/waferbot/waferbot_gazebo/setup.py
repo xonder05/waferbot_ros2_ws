@@ -25,7 +25,6 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            # "simulator_servo = waferbot_gazebo.simulator_servo:main",
             "ultrasonic_interpreter = waferbot_gazebo.ultrasonic_interpreter:main",
             "image_compressor = waferbot_gazebo.image_compressor:main",
         ],

@@ -7,14 +7,15 @@ from launch.substitutions import LaunchConfiguration
 def generate_launch_description():
 
     world_select_arg = DeclareLaunchArgument('world_select', default_value='wandering')
-    world_select_val = LaunchConfiguration('world_select')
+
+    robot_name_arg = DeclareLaunchArgument('robot_name', default_value="waferbot")
 
     # simulator start on selected world
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             FindPackageShare("waferbot_gazebo"), '/launch', '/gazebo_launch.py'
         ]),
-        launch_arguments={'world_select': world_select_val}.items()
+        launch_arguments={'world_select': LaunchConfiguration('world_select')}.items()
     )
 
     # xacro conversion and robot spawner
@@ -22,13 +23,19 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([
             FindPackageShare("waferbot_gazebo"), '/launch', '/robot_spawn_launch.py'
         ]),
-        launch_arguments={'world_select': world_select_val}.items()
+        launch_arguments={'world_select': LaunchConfiguration('world_select')}.items()
     )
 
-    # spawn controllers (controller manager is started as gazebo plugin)
-    ros2_control = IncludeLaunchDescription(
+    # ros2_control
+    diff_drive_controller_spawn = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
-            FindPackageShare("waferbot_gazebo"), '/launch', '/ros2_control_launch.py'
+            FindPackageShare("waferbot_ros2_control_bringup"), '/launch', '/diff_drive_controller_launch.py'
+        ])
+    )
+
+    forward_command_controller_spawn = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            FindPackageShare("waferbot_ros2_control_bringup"), '/launch', '/forward_command_controller_launch.py'
         ])
     )
 
@@ -43,15 +50,18 @@ def generate_launch_description():
     helpers = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             FindPackageShare("waferbot_gazebo"), '/launch', '/helpers_launch.py'
-        ])
+        ]),
+        launch_arguments={'robot_name': LaunchConfiguration('robot_name')}.items()
     )
 
     return LaunchDescription([
         world_select_arg,
+        robot_name_arg,
 
         gazebo,
         robot_spawn,
-        ros2_control,
+        diff_drive_controller_spawn,
+        forward_command_controller_spawn,
         bridges,
         helpers,
     ])
