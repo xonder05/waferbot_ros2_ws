@@ -1,0 +1,8 @@
+/**/wandering_node:
+  ros__parameters:
+
+    update_rate: 30
+
+    angular_goal_accuracy: 0.087 # rad
+    angular_decel_distance: 0.785 # rad
+    
