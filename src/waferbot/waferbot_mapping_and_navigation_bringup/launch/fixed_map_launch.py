@@ -14,10 +14,12 @@ def generate_launch_description():
     
     robot_name_arg = DeclareLaunchArgument('robot_name', default_value='waferbot')
 
+    map_file_arg = DeclareLaunchArgument('map_file', default_value='')
+
     config_file_path = PathJoinSubstitution([
         FindPackageShare('waferbot_mapping_and_navigation_bringup'),
         'config',
-        'nav2_localization.yaml'
+        'fixed_map.yaml'
     ])
 
     param_substitutions = {
@@ -34,21 +36,41 @@ def generate_launch_description():
         allow_substs=True
     )
 
+    lifecycle_manager = Node(
+        package='nav2_lifecycle_manager',
+        executable='lifecycle_manager',
+        namespace=LaunchConfiguration("robot_name"),
+        parameters=[{
+            'autostart': True, 
+            'node_names': ["map_server", "amcl"]
+        }],
+    )
+
+    map_server = Node(
+        package='nav2_map_server',
+        executable='map_server',
+        parameters=[config_file_path, {
+            "use_sim_time": LaunchConfiguration("use_sim_time"), 
+            'yaml_filename': LaunchConfiguration("map_file")
+        }],
+    )
+
     localization = Node(
         package='nav2_amcl',
         executable='amcl',
         namespace=LaunchConfiguration('robot_name'),
         parameters=[namespaced_config_file, {
-            "autostart_node": True,
             'use_sim_time': LaunchConfiguration("use_sim_time")
         }],
-        remappings=[('map', '/map'), ('/scan', 'scan')]
+        remappings=[('/scan', 'scan'), ('map', '/map')]
     )
-
 
     return LaunchDescription([
         use_sim_time_arg,
         robot_name_arg,
+        map_file_arg,
 
+        lifecycle_manager,
+        map_server,
         localization
     ])

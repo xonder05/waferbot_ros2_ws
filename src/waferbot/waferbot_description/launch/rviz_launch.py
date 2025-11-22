@@ -1,19 +1,20 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory
-import os
+from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
 
     use_sim_time_arg = DeclareLaunchArgument('use_sim_time', default_value='false')
 
-    rviz_config_path = os.path.join(
-        get_package_share_directory('waferbot_description'),
+    config_select_arg = DeclareLaunchArgument('config_file', default_value='single_robot.rviz')
+
+    rviz_config_path = PathJoinSubstitution([
+        FindPackageShare("waferbot_description"),
         'config',
-        'config.rviz'
-    )
+        LaunchConfiguration("config_file")
+    ])
 
     rviz = Node(
         package='rviz2',
@@ -26,5 +27,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         use_sim_time_arg,
+        config_select_arg,
+        
         rviz,
     ])

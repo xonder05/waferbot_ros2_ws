@@ -59,10 +59,10 @@ def generate_launch_description():
     ]
 
     navigation = GroupAction([
-        SetRemap('map', '/map'),
         PushRosNamespace(LaunchConfiguration('robot_name')),
-        SetRemap('/scan', 'scan'),
         SetParameter('use_sim_time', LaunchConfiguration("use_sim_time")),
+        SetRemap('/scan', 'scan'),
+        SetRemap('map', '/map'),
 
         Node(
             package='nav2_lifecycle_manager',
