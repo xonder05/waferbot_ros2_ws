@@ -1,10 +1,10 @@
+import time
+
 import rclpy
 from rclpy.node import Node
 
 from std_msgs.msg import Header
 from sensor_msgs.msg import Range
-
-import time
 
 import pigpio
 
@@ -17,24 +17,18 @@ class UltrasonicNode(Node):
             parameters=[
                 ('tr_pin', rclpy.Parameter.Type.INTEGER),
                 ('ec_pin', rclpy.Parameter.Type.INTEGER),
-                ('ec_timeout', rclpy.Parameter.Type.DOUBLE),
-                ('obstacle_warning_distance', rclpy.Parameter.Type.DOUBLE),
-                ('side_obstacle_minimum_detection_distance', rclpy.Parameter.Type.DOUBLE),
-                ('side_obstacle_maximum_detection_distance', rclpy.Parameter.Type.DOUBLE)
             ]
         )
         self.tr_pin = self.get_parameter('tr_pin').get_parameter_value().integer_value
         self.ec_pin = self.get_parameter('ec_pin').get_parameter_value().integer_value
-        self.ec_timeout = self.get_parameter('ec_timeout').get_parameter_value().double_value
-        self.obstacle_warning_distance = self.get_parameter('obstacle_warning_distance').get_parameter_value().double_value
         
-        self.range_publisher = self.create_publisher(Range, "/ultrasonic_range", 10)
+        self.range_publisher = self.create_publisher(Range, "range", 10)
         self.timer = self.create_timer(0.1, self.checkdist)
 
         self.gpio = pigpio.pi()
         
         if not self.gpio.connected:
-            self.get_logger().info("Could not connect to local pigpiod deamon")
+            raise RuntimeError("Could not connect to local pigpiod deamon")
 
         self.gpio.set_mode(self.tr_pin, pigpio.OUTPUT)
         self.gpio.set_mode(self.ec_pin, pigpio.INPUT)
@@ -97,16 +91,6 @@ class UltrasonicNode(Node):
         time.sleep(0.000015)
         self.gpio.write(self.tr_pin, 0)
         
-        
-        # todo emergency stop before hitting wall
-        #publish warning about close obstacle
-        # msg = Bool()
-        # if distance < self.obstacle_warning_distance:
-        #     msg.data = True
-        # else:
-        #     msg.data = False
-        # self.obstacle_warning_publisher.publish(msg)
-
 
 def main():
     rclpy.init()

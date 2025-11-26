@@ -109,7 +109,7 @@
                 <param name="pwm_high">2.0</param>
                 <param name="pwm_zero">1.5</param>
                 <param name="pwm_low">1.0</param>
-                <param name="scale">45.0</param>
+                <param name="scale">1.5707</param>
 
             </joint>
             

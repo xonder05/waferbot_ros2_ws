@@ -43,7 +43,7 @@ class ImuNode(Node):
         self.gyro_y_low_cutoff = self.get_parameter('gyro_y_low_cutoff').get_parameter_value().double_value
         self.gyro_z_low_cutoff = self.get_parameter('gyro_z_low_cutoff').get_parameter_value().double_value
         
-        self.publisher = self.create_publisher(Imu, "/imu", 10)
+        self.publisher = self.create_publisher(Imu, "imu", 10)
         self.tf_timer = self.create_timer(0.05, self.publish_measurement)
         
         self.sensor = sensor = mpu6050(0x68)

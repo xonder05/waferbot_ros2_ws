@@ -20,16 +20,16 @@ class CameraNode(Node):
                 ('video_capture', rclpy.Parameter.Type.STRING),
                 ('video_resolution_width', rclpy.Parameter.Type.INTEGER),
                 ('video_resolution_height', rclpy.Parameter.Type.INTEGER),
-                ('video_framerate', rclpy.Parameter.Type.DOUBLE),
+                ('video_framerate', rclpy.Parameter.Type.INTEGER),
             ]
         )
         self.video_capture = self.get_parameter('video_capture').get_parameter_value().string_value
         self.video_resolution_width = self.get_parameter('video_resolution_width').get_parameter_value().integer_value
         self.video_resolution_height = self.get_parameter('video_resolution_height').get_parameter_value().integer_value
-        self.video_framerate = self.get_parameter('video_framerate').get_parameter_value().double_value
+        self.video_framerate = self.get_parameter('video_framerate').get_parameter_value().integer_value
         
-        self.publisher = self.create_publisher(CompressedImage, "/camera_stream", 10)
-        self.timer = self.create_timer(self.video_framerate, self.get_frame)
+        self.publisher = self.create_publisher(CompressedImage, "camera/image_compressed", 10)
+        self.timer = self.create_timer(1 / self.video_framerate, self.get_frame)
         
         self.picam2 = Picamera2()
 
@@ -52,11 +52,13 @@ class CameraNode(Node):
         
         frame_rotated = cv2.rotate(frame, cv2.ROTATE_180)
 
-        ros_image = CompressedImage()
-        ros_image.format = "jpeg"
-        ros_image.data = cv2.imencode('.jpg', frame_rotated)[1].tobytes()
-        self.publisher.publish(ros_image)
-            
+        msg = CompressedImage()
+        msg.header.stamp = self.get_clock().now().to_msg()
+        msg.header.frame_id = "camera"
+        msg.format = "RGB888; jpeg rgb8"
+        msg.data = cv2.imencode('.jpg', frame_rotated)[1].tobytes()
+        self.publisher.publish(msg)
+
 def main():
     rclpy.init()
     node = CameraNode()
