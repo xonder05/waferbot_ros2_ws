@@ -27,6 +27,7 @@ def generate_launch_description():
         
         "local_costmap.local_costmap.ros__parameters.global_frame": [LaunchConfiguration("robot_name"), "/odom"],
         "local_costmap.local_costmap.ros__parameters.robot_base_frame": [LaunchConfiguration("robot_name"), "/base_link"],
+        "local_costmap.local_costmap.ros__parameters.voxel_layer.scan.topic": ["/", LaunchConfiguration("robot_name"), "/scan"],
 
         "collision_monitor.ros__parameters.base_frame_id": [LaunchConfiguration("robot_name"), "/base_footprint"],
         "collision_monitor.ros__parameters.odom_frame_id": [LaunchConfiguration("robot_name"), "/odom"],

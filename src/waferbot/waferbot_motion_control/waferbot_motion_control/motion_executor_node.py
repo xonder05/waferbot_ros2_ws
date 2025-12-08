@@ -174,7 +174,8 @@ class MotionExecutorNode(Node):
 
         msg = TwistStamped()
         msg.header.stamp = self.get_clock().now().to_msg()
-        msg.twist.linear.x = 0.0
+        msg.twist.linear.z = 0.0
+        self.velocity_publisher.publish(msg)
         
         if goal_handle.is_cancel_requested:
             goal_handle.abort()
@@ -275,10 +276,10 @@ class MotionExecutorNode(Node):
         return CancelResponse.ACCEPT
 
     def drive_execute_callback(self, goal_handle):
-
         msg = TwistStamped()
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.twist.linear.x = 0.0
+        self.velocity_publisher.publish(msg)
         
         if goal_handle.is_cancel_requested:
             goal_handle.abort()
