@@ -20,7 +20,6 @@ def generate_launch_description():
     ])
 
     param_substitutions = {
-        "ekf_filter_node.ros__parameters.map_frame": [LaunchConfiguration("robot_name"), "/map"],
         "ekf_filter_node.ros__parameters.odom_frame": [LaunchConfiguration("robot_name"), "/odom"],
         "ekf_filter_node.ros__parameters.base_link_frame": [LaunchConfiguration("robot_name"), "/base_link"],
         "ekf_filter_node.ros__parameters.world_frame": [LaunchConfiguration("robot_name"), "/odom"],
@@ -39,7 +38,9 @@ def generate_launch_description():
         package="robot_localization",
         executable="ekf_node",
         namespace=LaunchConfiguration("robot_name"),
-        parameters=[namespaced_config_file, {"use_sim_time": LaunchConfiguration("use_sim_time")}],
+        parameters=[namespaced_config_file, {
+            "use_sim_time": LaunchConfiguration("use_sim_time")
+        }],
     )
 
     return LaunchDescription([

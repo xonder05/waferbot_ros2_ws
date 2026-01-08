@@ -90,7 +90,7 @@
     <xacro:mesh_link name="top_baseplate" package="waferbot_description" file="description/meshes/orp_baseplate.stl"
                      mass="0.095" origin_orientation="1.5708 0 1.5708"/>
     <xacro:fixed_joint name="bottom_baseplate_to_top_baseplate" parent="bottom_baseplate" child="top_baseplate"
-                       origin_position="0 0 0.105"/>
+                       origin_position="0 0 0.080"/>
 
     <xacro:mesh_link name="lidar_adapter" package="waferbot_description" file="description/meshes/orp_lidar_adapter.stl"
                      mass="0.010" origin_orientation="1.5708 0 3.1415"/>

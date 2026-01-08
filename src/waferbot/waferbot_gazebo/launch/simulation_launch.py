@@ -59,6 +59,16 @@ def generate_launch_description():
         )
     )
 
+    joint_state_broadcaster_spawn = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare("waferbot_ros2_control_bringup"), 
+                "launch", 
+                "joint_state_broadcaster_launch.py"
+            ])
+        )
+    )
+
     # ros_gz_bridges
     bridges = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -92,6 +102,7 @@ def generate_launch_description():
         robot_spawn,
         diff_drive_controller_spawn,
         forward_command_controller_spawn,
+        joint_state_broadcaster_spawn,
         bridges,
         helpers,
     ])

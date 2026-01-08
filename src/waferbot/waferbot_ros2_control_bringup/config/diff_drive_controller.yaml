@@ -7,6 +7,4 @@
     wheel_separation: 0.213
     wheel_radius: 0.0345
 
-    odom_frame_id: odom
-    base_frame_id: base_link
     enable_odom_tf: false
