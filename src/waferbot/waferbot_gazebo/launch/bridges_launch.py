@@ -12,7 +12,7 @@ def generate_launch_description():
     config_file_path = PathJoinSubstitution([
         FindPackageShare("waferbot_gazebo"),
         "config",
-        "bridges_config.yaml"
+        "_bridges.yaml"
     ])
 
     ros_gz_bridge = Node(

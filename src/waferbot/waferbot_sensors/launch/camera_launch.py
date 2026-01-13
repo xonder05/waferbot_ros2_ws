@@ -10,19 +10,19 @@ def generate_launch_description():
     robot_name_arg = DeclareLaunchArgument("robot_name", default_value="waferbot")
 
     config_file_path = PathJoinSubstitution([
-        FindPackageShare("waferbot_gazebo"),
+        FindPackageShare("waferbot_sensors"),
         "config",
-        "_helpers.yaml"
+        "_sensors.yaml"
     ])
 
-    ultrasonic_interpreter = Node(
-        package="waferbot_gazebo",
-        executable="ultrasonic_interpreter",
+    pi_camera_node = Node(
+        package="waferbot_sensors",
+        executable="camera_node",
         namespace=LaunchConfiguration("robot_name"),
         parameters=[config_file_path]
     )
     
     return LaunchDescription([
         robot_name_arg,
-        ultrasonic_interpreter,
+        pi_camera_node,
     ])

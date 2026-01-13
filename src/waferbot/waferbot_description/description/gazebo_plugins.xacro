@@ -6,10 +6,9 @@
     <xacro:if value="$(arg use_sim)">
         <gazebo>
             <plugin filename="/opt/ros/jazzy/lib/libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-                <parameters>$(find waferbot_gazebo)/config/ros2_control_config.yaml</parameters>
+                <parameters>$(find waferbot_gazebo)/config/_ros2_control.yaml</parameters>
                 <ros>
                     <namespace>$(arg robot_name)</namespace>
-                    <remapping>/diff_drive_controller/cmd_vel:=/cmd_vel</remapping>
                 </ros>
             </plugin>
         </gazebo>

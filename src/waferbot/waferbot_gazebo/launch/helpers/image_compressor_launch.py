@@ -12,7 +12,7 @@ def generate_launch_description():
     config_file_path = PathJoinSubstitution([
         FindPackageShare("waferbot_gazebo"),
         "config",
-        "helpers_config.yaml"
+        "_helpers.yaml"
     ])
 
     image_compressor = Node(

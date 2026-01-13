@@ -10,19 +10,21 @@ def generate_launch_description():
     robot_name_arg = DeclareLaunchArgument("robot_name", default_value="waferbot")
 
     config_file_path = PathJoinSubstitution([
-        FindPackageShare("waferbot_gazebo"),
+        FindPackageShare("waferbot_behaviors"),
         "config",
-        "_helpers.yaml"
+        "_wandering.yaml"
     ])
 
-    ultrasonic_interpreter = Node(
-        package="waferbot_gazebo",
-        executable="ultrasonic_interpreter",
+    wandering_node = Node(
+        package="waferbot_behaviors",
+        executable="wandering_node",
         namespace=LaunchConfiguration("robot_name"),
-        parameters=[config_file_path]
+        parameters=[config_file_path, {
+            "use_sim_time": True
+        }]
     )
     
     return LaunchDescription([
         robot_name_arg,
-        ultrasonic_interpreter,
+        wandering_node,
     ])
