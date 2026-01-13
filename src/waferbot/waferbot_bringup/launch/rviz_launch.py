@@ -8,12 +8,12 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
 
     use_sim_time_arg = DeclareLaunchArgument("use_sim_time", default_value="false")
-    config_select_arg = DeclareLaunchArgument("config_file", default_value="single_robot.rviz")
+    config_select_arg = DeclareLaunchArgument("config_file", default_value="single_robot")
 
     rviz_config_path = PathJoinSubstitution([
-        FindPackageShare("waferbot_description"),
-        "config",
-        LaunchConfiguration("config_file")
+        FindPackageShare("waferbot_bringup"),
+        "rviz",
+        [LaunchConfiguration("config_file"), ".rviz"]
     ])
 
     rviz = Node(

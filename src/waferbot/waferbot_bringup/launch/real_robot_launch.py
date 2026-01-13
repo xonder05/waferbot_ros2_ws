@@ -1,5 +1,5 @@
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
@@ -9,10 +9,52 @@ def generate_launch_description():
 
     robot_name_arg = DeclareLaunchArgument("robot_name", default_value="waferbot")
 
+    # sensors
+    camera = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare("waferbot_sensors"),
+                "launch", 
+                "camera_launch.py"
+            ])
+        )
+    )
+
+    imu = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare("waferbot_sensors"),
+                "launch", 
+                "imu_launch.py"
+            ])
+        )
+    )
+
+    ultrasonic = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare("waferbot_sensors"),
+                "launch", 
+                "ultrasonic_launch.py"
+            ])
+        )
+    )
+
+    lidar = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare("waferbot_sensors"),
+                "launch", 
+                "ydlidar_launch.py"
+            ])
+        )
+    )
+
+    # actuators
     controller_manager = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
-                FindPackageShare("waferbot_ros2_control_bringup"), 
+                FindPackageShare("waferbot_control_bringup"), 
                 "launch", 
                 "controller_manager_launch.py"
             ])
@@ -25,7 +67,7 @@ def generate_launch_description():
     diff_drive_controller = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
-                FindPackageShare("waferbot_ros2_control_bringup"), 
+                FindPackageShare("waferbot_control_bringup"), 
                 "launch", 
                 "diff_drive_controller_launch.py"
             ])
@@ -38,7 +80,7 @@ def generate_launch_description():
     forward_command_controller = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
-                FindPackageShare("waferbot_ros2_control_bringup"), 
+                FindPackageShare("waferbot_control_bringup"), 
                 "launch", 
                 "forward_command_controller_launch.py"
             ])
@@ -51,7 +93,7 @@ def generate_launch_description():
     joint_state_broadcaster = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
-                FindPackageShare("waferbot_ros2_control_bringup"), 
+                FindPackageShare("waferbot_control_bringup"), 
                 "launch", 
                 "joint_state_broadcaster_launch.py"
             ])
@@ -63,8 +105,12 @@ def generate_launch_description():
 
     return LaunchDescription([
         robot_name_arg,
+        camera,
+        imu,
+        ultrasonic,
+        lidar,
         controller_manager,
         diff_drive_controller,
         forward_command_controller,
-        joint_state_broadcaster
+        joint_state_broadcaster,
     ])

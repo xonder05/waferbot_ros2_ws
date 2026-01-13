@@ -10,7 +10,7 @@ def generate_launch_description():
     robot_name_arg = DeclareLaunchArgument("robot_name", default_value="waferbot")
     world_select_arg = DeclareLaunchArgument("world_select", default_value="wandering")
 
-    # simulator start on selected world
+    # simulator and world
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
@@ -24,13 +24,13 @@ def generate_launch_description():
         ]
     )
 
-    # xacro conversion and robot spawner
+    # robot from description
     robot_spawn = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
                 FindPackageShare("waferbot_gazebo"), 
                 "launch", 
-                "robot_spawn_launch.py"
+                "spawn_robot_launch.py"
             ])
         ),
         launch_arguments=[
@@ -38,35 +38,44 @@ def generate_launch_description():
         ]
     )
 
-    # ros2_control
-    diff_drive_controller_spawn = IncludeLaunchDescription(
+    # actuators
+    diff_drive_controller = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
-                FindPackageShare("waferbot_ros2_control_bringup"), 
+                FindPackageShare("waferbot_control_bringup"), 
                 "launch", 
                 "diff_drive_controller_launch.py"
             ])
-        )
+        ),
+        launch_arguments=[
+            ("robot_name", LaunchConfiguration("robot_name"))            
+        ]
     )
 
-    forward_command_controller_spawn = IncludeLaunchDescription(
+    forward_command_controller = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
-                FindPackageShare("waferbot_ros2_control_bringup"), 
+                FindPackageShare("waferbot_control_bringup"), 
                 "launch", 
                 "forward_command_controller_launch.py"
             ])
-        )
+        ),
+        launch_arguments=[
+            ("robot_name", LaunchConfiguration("robot_name"))            
+        ]
     )
 
-    joint_state_broadcaster_spawn = IncludeLaunchDescription(
+    joint_state_broadcaster = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
-                FindPackageShare("waferbot_ros2_control_bringup"), 
+                FindPackageShare("waferbot_control_bringup"), 
                 "launch", 
                 "joint_state_broadcaster_launch.py"
             ])
-        )
+        ),
+        launch_arguments=[
+            ("robot_name", LaunchConfiguration("robot_name"))            
+        ]
     )
 
     # ros_gz_bridges
@@ -97,12 +106,12 @@ def generate_launch_description():
     return LaunchDescription([
         robot_name_arg,
         world_select_arg,
-
+        
         gazebo,
         robot_spawn,
-        diff_drive_controller_spawn,
-        forward_command_controller_spawn,
-        joint_state_broadcaster_spawn,
+        diff_drive_controller,
+        forward_command_controller,
+        joint_state_broadcaster,
         bridges,
         helpers,
     ])
