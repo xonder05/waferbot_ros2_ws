@@ -16,12 +16,12 @@ class WanderingNode(Node):
         self.declare_parameters(
             namespace="",
             parameters=[
-                ("update_rate", rclpy.Parameter.Type.INTEGER),
-                ("servo_move_time", rclpy.Parameter.Type.DOUBLE),
+                ("ultrasonic_period", rclpy.Parameter.Type.INTEGER),
+                ("servo_travel_time", rclpy.Parameter.Type.INTEGER),
             ]
         )
-        self.update_rate = self.get_parameter("update_rate").get_parameter_value().integer_value
-        self.servo_move_time = self.get_parameter("servo_move_time").get_parameter_value().double_value
+        self.ultrasonic_period = self.get_parameter("ultrasonic_period").get_parameter_value().integer_value * 1_000_000
+        self.servo_travel_time = self.get_parameter("servo_travel_time").get_parameter_value().integer_value * 1_000_000
 
         self.range_subscriber = self.create_subscription(Range, "range", self.range_callback, 10)
         self.servo_publisher = self.create_publisher(Float64MultiArray, "forward_command_controller/commands", 10)
@@ -29,7 +29,7 @@ class WanderingNode(Node):
         self.drive_action_client = ActionClient(self, Drive, "drive")
 
         self.next_state = "Start"
-        self.scan_angles = [-0.7853, -0.3927, 0, 0.3927, 0.7853]
+        self.scan_angles = [-0.7854, -0.3927, 0, 0.3927, 0.7854]
         self.scan_results = []
         self.scan_index = 0
         self.scan_save_distance = False
@@ -37,10 +37,10 @@ class WanderingNode(Node):
         self.fuzzy_init()
 
         # start fsm execution
-        self.sleep_duration = 1 / self.update_rate
-        self.timer = self.create_timer(self.sleep_duration, self.fsm)
+        self.timer = self.create_timer(0, self.fsm)
 
         self.get_logger().info("InitDone")
+
 
     def range_callback(self, msg):
         """Callback function for the ultrasonic range messages"""
@@ -50,7 +50,11 @@ class WanderingNode(Node):
 
         if self.scan_save_distance == True:
             self.scan_save_distance = False
-            self.scan_results.append(msg.range)
+
+            if msg.range < 10: # 10 is max fuzzy range
+                self.scan_results.append(msg.range)
+            else:
+                self.scan_results.append(10)
 
 #--------------------------------------- FSM ---------------------------------------
 
@@ -75,7 +79,7 @@ class WanderingNode(Node):
 
             self.scan_index += 1
 
-            self.timer.timer_period_ns = 1_000_000_000
+            self.timer.timer_period_ns = self.servo_travel_time
             self.timer.reset()
 
             self.next_state = "Scan_Scan"
@@ -85,12 +89,12 @@ class WanderingNode(Node):
         # get distance reading
         if self.next_state == "Scan_Scan":
 
-            if self.timer.timer_period_ns == 1_000_000_000:
+            if self.timer.timer_period_ns == self.servo_travel_time:
 
-                self.timer.timer_period_ns = 50_000_000
+                self.timer.timer_period_ns = self.ultrasonic_period
                 self.timer.reset()
 
-            if len(self.scan_results) <= self.scan_index:
+            if len(self.scan_results) < self.scan_index:
                 self.scan_save_distance = True
 
             else:
@@ -117,13 +121,14 @@ class WanderingNode(Node):
         if self.next_state == "Fuzzy":
 
             fuzzy_result = self.fuzzy_compute(self.scan_results)
+            self.get_logger().info(f"Scans: {[f"{s:.2f}" for s in self.scan_results]}")
 
             if fuzzy_result["action"] < 0:
-                self.get_logger().info(f"spinning {fuzzy_result["spin"]}")
+                self.get_logger().info(f"Spinning {fuzzy_result["spin"]:.2f}")
                 self.send_spin_goal(fuzzy_result["spin"])
 
             else:
-                self.get_logger().info(f"driving {fuzzy_result["drive"]}")
+                self.get_logger().info(f"Driving {fuzzy_result["drive"]:.2f}")
                 self.send_drive_goal(fuzzy_result["drive"])
 
             self.next_state = "Start"
@@ -201,17 +206,23 @@ class WanderingNode(Node):
         rules.append("IF (slight_right IS warn) THEN (action IS spin)")
         rules.append("IF (right IS warn) THEN (action IS spin)")
 
-        # rules.append("IF (left IS close) THEN (action IS spin)")
+        rules.append("IF (left IS close) THEN (action IS drive)")
         rules.append("IF (slight_left IS close) THEN (action IS spin)")
         rules.append("IF (front IS close) THEN (action IS spin)")
         rules.append("IF (slight_right IS close) THEN (action IS spin)")
-        # rules.append("IF (right IS close) THEN (action IS spin)")
+        rules.append("IF (right IS close) THEN (action IS drive)")
 
-        rules.append("""
-                     IF ((slight_left IS medium) OR (front IS medium) OR (slight_right IS medium) OR
-                     (slight_left IS far) OR (front IS far) OR (slight_right IS far))
-                     THEN (action IS drive)
-        """)
+        rules.append("IF (left IS medium) THEN (action IS drive)")
+        rules.append("IF (slight_left IS medium) THEN (action IS drive)")
+        rules.append("IF (front IS medium) THEN (action IS drive)")
+        rules.append("IF (slight_right IS medium) THEN (action IS drive)")
+        rules.append("IF (right IS medium) THEN (action IS drive)")
+
+        rules.append("IF (left IS far) THEN (action IS drive)")
+        rules.append("IF (slight_left IS far) THEN (action IS drive)")
+        rules.append("IF (front IS far) THEN (action IS drive)")
+        rules.append("IF (slight_right IS far) THEN (action IS drive)")
+        rules.append("IF (right IS far) THEN (action IS drive)")
 
         # drive rules
         rules.append("IF (left IS warn) THEN (drive IS drive_stop)")
@@ -243,27 +254,33 @@ class WanderingNode(Node):
                      IF (((left IS warn) OR (left IS close)) AND ((slight_left IS warn) OR (slight_left IS close)) AND
                      ((front IS warn) OR (front IS close)) AND ((slight_right IS warn) OR (slight_right IS close)) AND 
                      ((right IS warn) OR (right IS close))) THEN (spin IS spin_right)
-        """)
+        """) # wall in front
 
         rules.append("""
-                     IF (((left IS far) OR (left IS medium)) AND ((front IS close) OR (slight_right IS close)))
-                     THEN (spin IS spin_left)
-        """)
-
-        rules.append("""
-                     IF (((right IS far) OR (right IS medium)) AND ((front IS close) OR (slight_left IS close)))
+                     IF (((right IS far) OR (right IS medium)) AND ((left IS far) OR (left IS medium)) AND 
+                     (front IS close))
                      THEN (spin IS spin_right)
-        """)
-
+        """) # just front obstacle
+        
         rules.append("""
                      IF (((left IS far) OR (left IS medium)) AND ((right IS close) OR (right IS warn)))
                      THEN (spin IS spin_slight_left)
-        """)
+        """) # right obstacle
 
         rules.append("""
                      IF (((right IS far) OR (right IS medium)) AND ((left IS close) OR (left IS warn)))
                      THEN (spin IS spin_slight_right)
-        """)
+        """) # left obstacle
+        
+        rules.append("""
+                     IF (((left IS far) OR (left IS medium)) AND ((front IS close) OR (slight_right IS close)))
+                     THEN (spin IS spin_left)
+        """) # front right obstacle
+        
+        rules.append("""
+                     IF (((right IS far) OR (right IS medium)) AND ((front IS close) OR (slight_left IS close)))
+                     THEN (spin IS spin_right)
+        """) # front left obstacle
 
         self.FS.add_rules(rules)
 
@@ -312,7 +329,7 @@ class WanderingNode(Node):
 
     def spin_result_callback(self, future):
         """The result does not matter, restarts timer to continue FSM execution"""
-        self.timer = self.create_timer(self.sleep_duration, self.fsm)
+        self.timer = self.create_timer(0, self.fsm)
 
 
     def send_drive_goal(self, distance):
@@ -342,7 +359,7 @@ class WanderingNode(Node):
 
     def drive_result_callback(self, future):
         """The result does not matter, restarts timer to continue FSM execution"""
-        self.timer = self.create_timer(self.sleep_duration, self.fsm)
+        self.timer = self.create_timer(0, self.fsm)
 
 
 def main():

@@ -1,5 +1,5 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
@@ -25,17 +25,22 @@ def generate_launch_description():
     )
 
     # robot from description
-    robot_spawn = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            PathJoinSubstitution([
-                FindPackageShare("waferbot_gazebo"), 
-                "launch", 
-                "spawn_robot_launch.py"
-            ])
-        ),
-        launch_arguments=[
-            ("world_select", LaunchConfiguration("world_select"))
-        ]
+    robot_spawn = TimerAction(
+        actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    PathJoinSubstitution([
+                        FindPackageShare("waferbot_gazebo"), 
+                        "launch", 
+                        "spawn_robot_launch.py"
+                    ])
+                ),
+                launch_arguments=[
+                    ("world_select", LaunchConfiguration("world_select"))
+                ]
+            )
+        ],
+        period=2.0
     )
 
     # actuators

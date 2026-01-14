@@ -1,6 +1,5 @@
 /**/wandering_node:
   ros__parameters:
 
-    update_rate: 30 # hz
-    servo_move_time: 0.9 # s
-    
+    ultrasonic_period: 100 # ms
+    servo_travel_time: 250 # ms

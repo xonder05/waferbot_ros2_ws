@@ -6,8 +6,8 @@
     angular_goal_accuracy: 0.087 # rad
     angular_decel_distance: 0.785 # rad
 
-    min_angular_speed: 2.0 # rad/s
-    max_angular_speed: 3.0 # rad/s
+    min_angular_speed: 2.5 # rad/s
+    max_angular_speed: 3.5 # rad/s
     max_angular_accel: 10.0
 
     linear_goal_accuracy: 0.05 # m
