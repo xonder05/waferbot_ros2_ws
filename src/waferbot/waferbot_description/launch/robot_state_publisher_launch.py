@@ -12,7 +12,7 @@ def generate_launch_description():
 
     xacro_model_path = PathJoinSubstitution([
         FindPackageShare("waferbot_description"),
-        "description",
+        "xacro",
         "waferbot.xacro"
     ])
 

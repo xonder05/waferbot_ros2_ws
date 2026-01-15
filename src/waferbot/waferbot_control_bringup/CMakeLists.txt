@@ -12,12 +12,10 @@ foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
 endforeach()
 
-
 install(
   DIRECTORY launch config
   DESTINATION share/${PROJECT_NAME}
 )
-
 
 ## EXPORTS
 ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
