@@ -1,5 +1,5 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
@@ -15,6 +15,11 @@ def generate_launch_description():
         "worlds",
         [LaunchConfiguration("world_select"), "_world.sdf"]
     ])
+
+    gz_env = SetEnvironmentVariable(
+        name="GZ_SIM_RESOURCE_PATH",
+        value=FindPackageShare("waferbot_gazebo")
+    )
 
     simulator = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -38,6 +43,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         world_select_arg,
+        gz_env,
         simulator,
         clock,
     ])

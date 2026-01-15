@@ -1,20 +1,15 @@
 <sdf version='1.9'>
   <world name='wandering'>
     
+    <plugin name='gz::sim::systems::Physics' filename='ignition-gazebo-physics-system'/>
+    <plugin name='gz::sim::systems::SceneBroadcaster' filename='ignition-gazebo-scene-broadcaster-system'/>
+    <plugin name='gz::sim::systems::UserCommands' filename='ignition-gazebo-user-commands-system'/>
+
     <physics name='1ms' type='ignored'>
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1</real_time_factor>
       <real_time_update_rate>1000</real_time_update_rate>
     </physics>
-    
-    <plugin name='gz::sim::systems::Physics' filename='ignition-gazebo-physics-system'/>
-    <plugin name='gz::sim::systems::UserCommands' filename='ignition-gazebo-user-commands-system'/>
-    <plugin name='gz::sim::systems::SceneBroadcaster' filename='ignition-gazebo-scene-broadcaster-system'/>
-    <plugin name='gz::sim::systems::Contact' filename='ignition-gazebo-contact-system'/>
-    <plugin name='gz::sim::systems::Sensors' filename='ignition-gazebo-sensors-system'>
-      <render_engine>ogre2</render_engine>
-    </plugin>
-    
     <gravity>0 0 -9.8</gravity>
     <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
     <atmosphere type='adiabatic'/>
@@ -36,7 +31,7 @@
         <quadratic>0.001</quadratic>
       </attenuation>
       <direction>-0.5 0.1 -0.9</direction>
-  </light>
+    </light>
 
     <model name='ground_plane'>
       <static>true</static>
@@ -69,21 +64,32 @@
             <contact/>
           </surface>
         </collision>
-        <inertial>
-          <mass>100</mass>
-          <inertia>
-            <ixx>1</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>1</iyy>
-            <iyz>0</iyz>
-            <izz>1</izz>
-          </inertia>
-        </inertial>
-        <enable_wind>false</enable_wind>
       </link>
-      <self_collide>false</self_collide>
     </model>
+
+    <include>
+      <name>border1</name>
+      <uri>model://worlds/objects/border.sdf</uri>
+      <pose>0 4 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <name>border2</name>
+      <uri>model://worlds/objects/border.sdf</uri>
+      <pose>0 -4 0 0 0 0</pose>
+    </include>
+
+    <include>
+      <name>border3</name>
+      <uri>model://worlds/objects/border.sdf</uri>
+      <pose>4 0 0 0 0 1.57</pose>
+    </include>
+
+    <include>
+      <name>border4</name>
+      <uri>model://worlds/objects/border.sdf</uri>
+      <pose>-4 0 0 0 0 1.57</pose>
+    </include>
 
     <include>
       <name>obstacle1</name>
@@ -203,30 +209,6 @@
       <name>obstacle20</name>
       <uri>model://worlds/objects/obstacle.sdf</uri>
       <pose>1 0.1 0.125 0 0 0</pose>
-    </include>
-
-    <include>
-      <name>border1</name>
-      <uri>model://worlds/objects/borders.sdf</uri>
-      <pose>0 4 0 0 0 0</pose>
-    </include>
-
-    <include>
-      <name>border2</name>
-      <uri>model://worlds/objects/borders.sdf</uri>
-      <pose>0 -4 0 0 0 0</pose>
-    </include>
-
-    <include>
-      <name>border3</name>
-      <uri>model://worlds/objects/borders.sdf</uri>
-      <pose>4 0 0 0 0 1.57</pose>
-    </include>
-
-    <include>
-      <name>border4</name>
-      <uri>model://worlds/objects/borders.sdf</uri>
-      <pose>-4 0 0 0 0 1.57</pose>
     </include>
 
   </world>

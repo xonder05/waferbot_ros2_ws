@@ -4,7 +4,7 @@ project(waferbot_mapping_bringup)
 find_package(ament_cmake REQUIRED)
 
 install(
-  DIRECTORY launch config
+  DIRECTORY launch config maps
   DESTINATION share/${PROJECT_NAME}
 )
 

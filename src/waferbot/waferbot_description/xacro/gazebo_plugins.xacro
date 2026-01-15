@@ -14,6 +14,12 @@
         </gazebo>
     </xacro:if>
 
+    <gazebo>
+        <plugin name='gz::sim::systems::Sensors' filename='ignition-gazebo-sensors-system'>
+            <render_engine>ogre2</render_engine>
+        </plugin>
+    </gazebo>
+
     <gazebo reference="imu">
         <sensor name="imu" type="imu">
             <plugin filename="libgz-sim-imu-system.so" name="gz::sim::systems::Imu"></plugin>
@@ -105,7 +111,7 @@
         <sensor name="camera_sensor" type="camera">
 
             <update_rate>30</update_rate>
-            <topic>$(arg robot_name)/camera</topic>
+            <topic>$(arg robot_name)/camera/image</topic>
             <gz_frame_id>$(arg robot_name)/camera</gz_frame_id>
 
             <camera>

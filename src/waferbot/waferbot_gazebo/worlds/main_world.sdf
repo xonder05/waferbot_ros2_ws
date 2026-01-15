@@ -1,20 +1,15 @@
 <sdf version='1.9'>
   <world name='garden'>
     
+    <plugin name='gz::sim::systems::Physics' filename='ignition-gazebo-physics-system'/>
+    <plugin name='gz::sim::systems::SceneBroadcaster' filename='ignition-gazebo-scene-broadcaster-system'/>
+    <plugin name='gz::sim::systems::UserCommands' filename='ignition-gazebo-user-commands-system'/>
+    
     <physics name='1ms' type='ignored'>
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1</real_time_factor>
       <real_time_update_rate>1000</real_time_update_rate>
     </physics>
-    
-    <plugin name='gz::sim::systems::Physics' filename='ignition-gazebo-physics-system'/>
-    <plugin name='gz::sim::systems::UserCommands' filename='ignition-gazebo-user-commands-system'/>
-    <plugin name='gz::sim::systems::SceneBroadcaster' filename='ignition-gazebo-scene-broadcaster-system'/>
-    <plugin name='gz::sim::systems::Contact' filename='ignition-gazebo-contact-system'/>
-    <plugin name='gz::sim::systems::Sensors' filename='ignition-gazebo-sensors-system'>
-      <render_engine>ogre2</render_engine>
-    </plugin>
-    
     <gravity>0 0 -9.8</gravity>
     <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
     <atmosphere type='adiabatic'/>
@@ -42,17 +37,17 @@
       <static>true</static>
       <link name='ground_plane'>
         <visual name='visual'>
-            <geometry>
-                <plane>
-                    <normal>0 0 1</normal>
-                    <size>100 100</size>
-                </plane>
-            </geometry>
-            <material>
-                <ambient>0 0.1 0 1</ambient>
-                <diffuse>0 0.1 0 1</diffuse>
-                <specular>0 0.1 0 1</specular>
-            </material>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0 0.1 0 1</ambient>
+            <diffuse>0 0.1 0 1</diffuse>
+            <specular>0 0.1 0 1</specular>
+          </material>
         </visual>
         <collision name='collision'>
           <geometry>
@@ -63,49 +58,36 @@
           </geometry>
           <surface>
             <friction>
-                <ode/>
+              <ode/>
             </friction>
             <bounce/>
             <contact/>
           </surface>
         </collision>
-        <inertial>
-          <mass>100</mass>
-          <inertia>
-            <ixx>1</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>1</iyy>
-            <iyz>0</iyz>
-            <izz>1</izz>
-          </inertia>
-        </inertial>
-        <enable_wind>false</enable_wind>
       </link>
-      <self_collide>false</self_collide>
     </model>
 
     <include>
       <name>border1</name>
-      <uri>model://worlds/objects/borders.sdf</uri>
+      <uri>model://worlds/objects/border.sdf</uri>
       <pose>0 4 0 0 0 0</pose>
     </include>
 
     <include>
       <name>border2</name>
-      <uri>model://worlds/objects/borders.sdf</uri>
+      <uri>model://worlds/objects/border.sdf</uri>
       <pose>0 -4 0 0 0 0</pose>
     </include>
 
     <include>
       <name>border3</name>
-      <uri>model://worlds/objects/borders.sdf</uri>
+      <uri>model://worlds/objects/border.sdf</uri>
       <pose>4 0 0 0 0 1.57</pose>
     </include>
 
     <include>
       <name>border4</name>
-      <uri>model://worlds/objects/borders.sdf</uri>
+      <uri>model://worlds/objects/border.sdf</uri>
       <pose>-4 0 0 0 0 1.57</pose>
     </include>
 

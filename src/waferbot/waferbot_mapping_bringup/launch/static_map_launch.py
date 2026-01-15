@@ -12,7 +12,7 @@ def generate_launch_description():
 
     robot_name_arg = DeclareLaunchArgument("robot_name", default_value="waferbot")
     use_sim_time_arg = DeclareLaunchArgument("use_sim_time", default_value="false")
-    map_file_arg = DeclareLaunchArgument("map_file", default_value="")
+    map_file_arg = DeclareLaunchArgument("map_select", default_value="wandering")
 
     config_file_path = PathJoinSubstitution([
         FindPackageShare("waferbot_mapping_bringup"),
@@ -34,6 +34,12 @@ def generate_launch_description():
         allow_substs=True
     )
 
+    map_file_path = PathJoinSubstitution([
+        FindPackageShare("waferbot_mapping_bringup"),
+        "maps",
+        [LaunchConfiguration("map_select"), "_map.yaml"]
+    ])
+
     lifecycle_manager = Node(
         package="nav2_lifecycle_manager",
         executable="lifecycle_manager",
@@ -50,7 +56,7 @@ def generate_launch_description():
         namespace=LaunchConfiguration("robot_name"),
         parameters=[config_file_path, {
             "use_sim_time": LaunchConfiguration("use_sim_time"), 
-            "yaml_filename": LaunchConfiguration("map_file")
+            "yaml_filename": map_file_path
         }],
         remappings=[("map", "/map")]
     )

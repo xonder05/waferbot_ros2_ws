@@ -5,5 +5,5 @@
 
 /**/image_compressor:
   ros__parameters:
-    gazebo_topic: "camera"
-    ros_topic: "camera_compressed"
+    gazebo_topic: "camera/image"
+    ros_topic: "camera/image_compressed"
