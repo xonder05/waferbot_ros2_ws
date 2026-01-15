@@ -39,9 +39,8 @@ at once.
 for starting the entire robot. Its most important 
 argument is `targets`.
 Using it you can select which parts of the stack will 
-be started. Options are `real`, `sim`, `localization`, `static_map`, `live_mapping` and `navigation`. 
-The argument can take any number of these in any 
-order separated by spaces (except for real and simulation, those are exclusive, also note that navigation will not work without localization). For example:
+be started. Options are `real`, `sim`, `localization`, `wandering`, `static_map`, `live_mapping` and `navigation`. 
+The argument can take any number of these in any order separated by spaces (except for real and simulation, wandering and navigation, those are exclusive, also note that navigation / wandering will not work without localization).
 
 `ros2 launch waferbot_bringup waferobot_launch.py targets:="real localization live_mapping navigation"`
 

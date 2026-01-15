@@ -19,11 +19,14 @@ def validate_args(context, *args, **kwargs):
     targets = list(targets_arg_string.lower().split())
 
     for target in targets:
-        if target not in ["real", "sim", "localization", "live_mapping", "static_map", "navigation"]:
-            raise RuntimeError(f"{target} is not valid target")
+        if target not in ["real", "sim", "localization", "wandering", "live_mapping", "static_map", "navigation"]:
+            raise RuntimeError(f"One of the targets you provided is {target}, which is not a valid target, please check your spelling or list of valid targets.")
 
     if "sim" in targets and "real" in targets:
-        raise RuntimeError("Pick either sim or real, not both")
+        raise RuntimeError("Running real robot and simulator from single launch file will lead to wrong namespacing and duplicate data in topics, please pick either real or sim, not both.")
+
+    if "wandering" in targets and "navigation" in targets:
+        raise RuntimeError("Both wandering and navigation handle movement of the robot, please pick just one of them at a time.")
 
     return [SetLaunchConfiguration("use_sim_time", "true" if "sim" in targets else "false")]
 
@@ -93,6 +96,36 @@ def generate_launch_description():
         condition=keyword_condition("localization")
     )
 
+    motion_executor = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare("waferbot_behaviors"), 
+                "launch", 
+                "motion_executor_launch.py"
+            ])
+        ),
+        launch_arguments=[
+            ("robot_name", LaunchConfiguration("robot_name")),
+            ("use_sim_time", LaunchConfiguration("use_sim_time"))
+        ],
+        condition=keyword_condition("wandering")
+    )
+
+    wandering = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare("waferbot_behaviors"), 
+                "launch", 
+                "wandering_launch.py"
+            ])
+        ),
+        launch_arguments=[
+            ("robot_name", LaunchConfiguration("robot_name")),
+            ("use_sim_time", LaunchConfiguration("use_sim_time"))
+        ],
+        condition=keyword_condition("wandering")
+    )
+
     live_mapping = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
@@ -148,6 +181,8 @@ def generate_launch_description():
         real_robot,
         sim_robot,
         localization,
+        motion_executor,
+        wandering,
         static_map,
         live_mapping,
         navigation
