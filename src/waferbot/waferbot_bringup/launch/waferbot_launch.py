@@ -152,7 +152,6 @@ def generate_launch_description():
         launch_arguments=[
             ("robot_name", LaunchConfiguration("robot_name")),
             ("use_sim_time", LaunchConfiguration("use_sim_time")),
-            ("map_file", "todo")
         ],
         condition=keyword_condition("static_map")
     )
