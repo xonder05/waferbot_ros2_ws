@@ -18,9 +18,11 @@ def generate_launch_description():
     lidar_node = LifecycleNode(
         package="ydlidar_ros2_driver",
         executable="ydlidar_ros2_driver_node",
+        name="ydlidar_ros2_driver_node",
         namespace=LaunchConfiguration("robot_name"),
-        emulate_tty=True,
         parameters=[config_file_path],
+        emulate_tty=True,
+        output='screen',
     )
 
     return LaunchDescription([
