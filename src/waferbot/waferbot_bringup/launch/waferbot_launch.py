@@ -19,7 +19,7 @@ def validate_args(context, *args, **kwargs):
     targets = list(targets_arg_string.lower().split())
 
     for target in targets:
-        if target not in ["real", "sim", "localization", "wandering", "live_mapping", "static_map", "navigation"]:
+        if target not in ["rsp", "real", "sim", "localization", "wandering", "live_mapping", "static_map", "navigation"]:
             raise RuntimeError(f"One of the targets you provided is {target}, which is not a valid target, please check your spelling or list of valid targets.")
 
     if "sim" in targets and "real" in targets:
@@ -28,11 +28,10 @@ def validate_args(context, *args, **kwargs):
     if "wandering" in targets and "navigation" in targets:
         raise RuntimeError("Both wandering and navigation handle movement of the robot, please pick just one of them at a time.")
 
-    return [SetLaunchConfiguration("use_sim_time", "true" if "sim" in targets else "false")]
-
 def generate_launch_description():
 
     robot_name_arg = DeclareLaunchArgument("robot_name", default_value="waferbot")
+    use_sim_time_arg = DeclareLaunchArgument("use_sim_time", default_value="false")
     targets_arg = DeclareLaunchArgument("targets", default_value="real", 
         description="Space separated list of launch targets. Allowed values are: real, sim, localization, live_mapping, static_map, navigation"
     )
@@ -50,7 +49,8 @@ def generate_launch_description():
         launch_arguments=[
             ("robot_name", LaunchConfiguration("robot_name")),
             ("use_sim_time", LaunchConfiguration("use_sim_time"))
-        ]
+        ],
+        condition=keyword_condition("rsp")
     )
 
     real_robot = IncludeLaunchDescription(
@@ -173,6 +173,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         robot_name_arg,
+        use_sim_time_arg,
         targets_arg,
         validate_args_,
 
