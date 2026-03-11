@@ -1,0 +1,191 @@
+<sdf version="1.9">
+  <model name="robot_parking">
+
+    <!-- Walls -->
+
+    <model name="wall1">
+      <static>true</static>
+      <pose>0 2.375 0 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>3 0.25 0.5</size></box></geometry>
+          <material><diffuse>1.0 0.4 0 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+          <geometry><box><size>3 0.25 0.5</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="wall2">
+      <static>true</static>
+      <pose>1.375 0 0 0 0 1.5707</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>5 0.25 0.5</size></box></geometry>
+          <material><diffuse>1.0 0.4 0 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+        <geometry><box><size>5 0.25 0.5</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="wall3">
+      <static>true</static>
+      <pose>-1.375 0 0 0 0 1.5707</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>5 0.25 0.5</size></box></geometry>
+          <material><diffuse>1.0 0.4 0 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+        <geometry><box><size>5 0.25 0.5</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="wall4">
+      <static>true</static>
+      <pose>1 -2.375 0 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>1 0.25 0.5</size></box></geometry>
+          <material><diffuse>1.0 0.4 0 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+        <geometry><box><size>1 0.25 0.5</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="wall5">
+      <static>true</static>
+      <pose>-1 -2.375 0 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>1 0.25 0.5</size></box></geometry>
+          <material><diffuse>1.0 0.4 0 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+        <geometry><box><size>1 0.25 0.5</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+    
+    <!-- Base station separators -->
+
+    <model name="base_station_separator_1">
+      <static>true</static>
+      <pose>1 1.5 0 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+          <material><diffuse>1.0 0.4 0 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+        <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="base_station_separator_2">
+      <static>true</static>
+      <pose>1 0.5 0 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+          <material><diffuse>1.0 0.4 0 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+        <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="base_station_separator_3">
+      <static>true</static>
+      <pose>1 -0.5 0 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+          <material><diffuse>1.0 0.4 0 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="base_station_separator_4">
+      <static>true</static>
+      <pose>1 -1.5 0 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+          <material><diffuse>1.0 0.4 0 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="base_station_separator_5">
+      <static>true</static>
+      <pose>-1 1.5 0 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+          <material><diffuse>1.0 0.4 0 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="base_station_separator_6">
+      <static>true</static>
+      <pose>-1 0.5 0 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+          <material><diffuse>1.0 0.4 0 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="base_station_separator_7">
+      <static>true</static>
+      <pose>-1 -0.5 0 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+          <material><diffuse>1.0 0.4 0 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="base_station_separator_8">
+      <static>true</static>
+      <pose>-1 -1.5 0 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+          <material><diffuse>1.0 0.4 0 1</diffuse></material>
+        </visual>
+        <collision name="collision">
+          <geometry><box><size>0.75 0.025 0.4</size></box></geometry>
+        </collision>
+      </link>
+    </model>
+
+  </model>
+</sdf>

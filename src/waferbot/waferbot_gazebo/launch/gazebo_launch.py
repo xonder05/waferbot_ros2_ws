@@ -13,6 +13,7 @@ def generate_launch_description():
     world_file_path = PathJoinSubstitution([
         FindPackageShare("waferbot_gazebo"),
         "worlds",
+        LaunchConfiguration("world_select"),
         [LaunchConfiguration("world_select"), "_world.sdf"]
     ])
 
