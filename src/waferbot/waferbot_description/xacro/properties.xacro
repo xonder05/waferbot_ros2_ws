@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-    <xacro:property name="wheel_separation" value="0.213" />
-    <xacro:property name="wheel_radius" value="0.069" />
-
     <material name="red">
         <color rgba="1.0 0.0 0.0 1.0"/>
     </material>
