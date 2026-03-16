@@ -8,7 +8,8 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
 
     robot_name_arg = DeclareLaunchArgument("robot_name", default_value="waferbot")
-    use_sim_arg = DeclareLaunchArgument("use_sim_time", default_value="false")
+    use_sim_arg = DeclareLaunchArgument("use_sim_time", default_value="False")
+    optimize_sim_perf_arg = DeclareLaunchArgument("optimize_sim_perf", default_value="False")
 
     xacro_model_path = PathJoinSubstitution([
         FindPackageShare("waferbot_description"),
@@ -19,8 +20,9 @@ def generate_launch_description():
     urdf_model = Command([
         "xacro ",
         xacro_model_path,
+        " robot_name:=", LaunchConfiguration("robot_name"),
         " use_sim:=", LaunchConfiguration("use_sim_time"),
-        " robot_name:=", LaunchConfiguration("robot_name")
+        " optimize_sim_perf:=", LaunchConfiguration("optimize_sim_perf"),
     ])
 
     robot_state_publisher = Node(
@@ -35,7 +37,8 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        use_sim_arg,
         robot_name_arg,
+        use_sim_arg,
+        optimize_sim_perf_arg,
         robot_state_publisher,
     ])

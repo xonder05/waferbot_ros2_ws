@@ -3,7 +3,7 @@
 
 <!-- basic building blocks -->
 
-<xacro:macro name="box_link" params="name mass x y z material:=red origin_position:='0 0 0' origin_orientation:='0 0 0'">
+<xacro:macro name="box_link" params="name mass x y z material:=red origin_position:='0 0 0' origin_orientation:='0 0 0' use_collision:=${not $(arg optimize_sim_perf)}">
 
     <link name="${name}">
         <inertial>
@@ -13,6 +13,7 @@
                      izz="${(1/12) * mass * (x*x+y*y)}" />
             <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
         </inertial>
+        
         <visual>
             <geometry>
                 <box size="${x} ${y} ${z}"/>
@@ -20,17 +21,20 @@
             <material name="${material}"/>
             <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
         </visual>
-        <collision>
-            <geometry>
-                <box size="${x} ${y} ${z}"/>
-            </geometry>
-            <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
-        </collision>
+        
+        <xacro:if value="${use_collision}">
+            <collision>
+                <geometry>
+                    <box size="${x} ${y} ${z}"/>
+                </geometry>
+                <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
+            </collision>
+        </xacro:if>
     </link>
 
 </xacro:macro>
 
-<xacro:macro name="cylinder_link" params="name mass radius length material:=red origin_position:='0 0 0' origin_orientation:='0 0 0'">
+<xacro:macro name="cylinder_link" params="name mass radius length material:=red origin_position:='0 0 0' origin_orientation:='0 0 0' use_collision:=${not $(arg optimize_sim_perf)}">
   
     <link name="${name}">
         <inertial>
@@ -40,6 +44,7 @@
                      izz="${(1/2) * mass * (radius*radius)}" />
             <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
         </inertial>
+        
         <visual>
             <geometry>
                 <cylinder radius="${radius}" length="${length}"/>
@@ -47,17 +52,20 @@
             <material name="${material}"/>
             <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
         </visual>
-        <collision>
-            <geometry>
-                <cylinder radius="${radius}" length="${length}"/>
-            </geometry>
-            <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
-        </collision>
+
+        <xacro:if value="${use_collision}">
+            <collision>
+                <geometry>
+                    <cylinder radius="${radius}" length="${length}"/>
+                </geometry>
+                <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
+            </collision>
+        </xacro:if>
     </link>
 
 </xacro:macro>
 
-<xacro:macro name="ball_link" params="name mass radius material:=red origin_position:='0 0 0' origin_orientation:='0 0 0'">
+<xacro:macro name="ball_link" params="name mass radius material:=red origin_position:='0 0 0' origin_orientation:='0 0 0' use_collision:=${not $(arg optimize_sim_perf)}">
 
     <link name="${name}">
         <inertial>
@@ -68,6 +76,7 @@
                 izz="0.002"/>
             <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
         </inertial>
+        
         <visual>
             <geometry>
                 <sphere radius="${radius}"/>
@@ -75,17 +84,20 @@
             <material name="${material}"/>
             <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
         </visual>
-        <collision>
-            <geometry>
-                <sphere radius="${radius}"/>
-            </geometry>
-            <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
-        </collision>
+        
+        <xacro:if value="${use_collision}">
+            <collision>
+                <geometry>
+                    <sphere radius="${radius}"/>
+                </geometry>
+                <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
+            </collision>
+        </xacro:if>
     </link>
 
 </xacro:macro>
 
-<xacro:macro name="mesh_link" params="name package file material:=red scale:=0.001 origin_position:='0 0 0' origin_orientation:='0 0 0' mass:=0.020">
+<xacro:macro name="mesh_link" params="name package file material:=red scale:=0.001 origin_position:='0 0 0' origin_orientation:='0 0 0' mass:=0.020 use_collision:=${not $(arg optimize_sim_perf)}">
 
     <link name="${name}">
         <inertial>
@@ -103,12 +115,14 @@
             <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
         </visual>
 
-        <collision>
-            <geometry>
-                <mesh filename="file://$(find ${package})/${file}" scale="${scale} ${scale} ${scale}"/>
-            </geometry>
-            <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
-        </collision>
+        <xacro:if value="${use_collision}">
+            <collision>
+                <geometry>
+                    <mesh filename="file://$(find ${package})/${file}" scale="${scale} ${scale} ${scale}"/>
+                </geometry>
+                <origin xyz="${origin_position}" rpy="${origin_orientation}"/>
+            </collision>
+        </xacro:if>
     </link>
 
 </xacro:macro>

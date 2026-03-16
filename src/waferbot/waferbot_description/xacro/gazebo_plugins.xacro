@@ -101,35 +101,37 @@
         </sensor>
     </gazebo>
 
-    <gazebo reference="camera">
-        <sensor name="camera_sensor" type="camera">
+    <xacro:unless value="$(arg optimize_sim_perf)">
+        <gazebo reference="camera">
+            <sensor name="camera_sensor" type="camera">
 
-            <update_rate>20</update_rate>
-            <topic>$(arg robot_name)/camera/image</topic>
-            <gz_frame_id>$(arg robot_name)/camera</gz_frame_id>
+                <update_rate>20</update_rate>
+                <topic>$(arg robot_name)/camera/image</topic>
+                <gz_frame_id>$(arg robot_name)/camera</gz_frame_id>
 
-            <camera>
-                <horizontal_fov>0.9328</horizontal_fov>
-                <image>
-                    <width>640</width>
-                    <height>480</height>
-                    <format>RGB_INT8</format>
-                </image>
-                <clip>
-                    <near>0.01</near>
-                    <far>100</far>
-                </clip>
-                <visibility_mask>4294967295</visibility_mask>
-                <lens>
-                    <type>stereographic</type>
-                    <scale_to_hfov>true</scale_to_hfov>
-                    <cutoff_angle>1.5708</cutoff_angle>
-                    <env_texture_size>256</env_texture_size>
-                </lens>
-            </camera>
+                <camera>
+                    <horizontal_fov>0.9328</horizontal_fov>
+                    <image>
+                        <width>640</width>
+                        <height>480</height>
+                        <format>RGB_INT8</format>
+                    </image>
+                    <clip>
+                        <near>0.01</near>
+                        <far>100</far>
+                    </clip>
+                    <visibility_mask>4294967295</visibility_mask>
+                    <lens>
+                        <type>stereographic</type>
+                        <scale_to_hfov>true</scale_to_hfov>
+                        <cutoff_angle>1.5708</cutoff_angle>
+                        <env_texture_size>256</env_texture_size>
+                    </lens>
+                </camera>
 
-        </sensor>
-    </gazebo>
+            </sensor>
+        </gazebo>
+    </xacro:unless>
 
 </xacro:macro>
 
