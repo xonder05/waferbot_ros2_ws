@@ -3,12 +3,19 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetE
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
-from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+
+from ros_gz_bridge.actions import RosGzBridge
 
 def generate_launch_description():
     
     world_select_arg = DeclareLaunchArgument("world_select", default_value="wandering")
+
+    config_file_path = PathJoinSubstitution([
+        FindPackageShare("waferbot_gazebo"),
+        "config",
+        "_clock_bridge.yaml"
+    ])
 
     world_file_path = PathJoinSubstitution([
         FindPackageShare("waferbot_gazebo"),
@@ -35,16 +42,21 @@ def generate_launch_description():
         ]
     )
 
-    #ros2 run ros_gz_bridge parameter_bridge /clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock
-    clock = Node(
-        package="ros_gz_bridge",
-        executable="parameter_bridge",
-        arguments=["/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"]
+    ros_gz_bridge_container = RosGzBridge (
+        
+        # create container (robot bridge nodes will reuse this)
+        use_composition=True,
+        container_name="ros_gz_bridge_container",
+        create_own_container=True,
+        
+        # start clock bridge
+        bridge_name="ros_gz_bridge",
+        config_file=config_file_path,
     )
 
     return LaunchDescription([
         world_select_arg,
         gz_env,
         simulator,
-        clock,
+        ros_gz_bridge_container,
     ])

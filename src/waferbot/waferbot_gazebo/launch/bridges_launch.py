@@ -5,6 +5,8 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
+from ros_gz_bridge.actions import RosGzBridge
+
 def generate_launch_description():
     
     robot_name_arg = DeclareLaunchArgument("robot_name", default_value="waferbot")
@@ -15,17 +17,19 @@ def generate_launch_description():
         "_bridges.yaml"
     ])
 
-    ros_gz_bridge = Node(
-        package="ros_gz_bridge",
-        executable="parameter_bridge",
+    spawn_bridge_in_container = RosGzBridge (
+        
+        use_composition=True,
+        container_name="ros_gz_bridge_container",
+        create_own_container=False,
+        
+        bridge_name="ros_gz_bridge",
         namespace=LaunchConfiguration("robot_name"),
-        parameters=[{
-            "expand_gz_topic_names": True,
-            "config_file": config_file_path
-        }]
+        config_file=config_file_path,
+        extra_bridge_params={"expand_gz_topic_names": True}
     )
 
     return LaunchDescription([
         robot_name_arg,
-        ros_gz_bridge,
+        spawn_bridge_in_container,
     ])
