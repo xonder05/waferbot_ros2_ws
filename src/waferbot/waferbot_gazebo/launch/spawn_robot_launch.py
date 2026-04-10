@@ -10,6 +10,7 @@ def generate_launch_description():
     spawn_x_arg = DeclareLaunchArgument("x", default_value="0.0")
     spawn_y_arg = DeclareLaunchArgument("y", default_value="0.0")
     spawn_z_arg = DeclareLaunchArgument("z", default_value="0.5")
+    spawn_yaw_arg = DeclareLaunchArgument("yaw", default_value="0.0")
 
     spawn_robot = Node(
         package="ros_gz_sim", 
@@ -19,6 +20,7 @@ def generate_launch_description():
             "x": LaunchConfiguration("x"),
             "y": LaunchConfiguration("y"),
             "z": LaunchConfiguration("z"),
+            'Y': LaunchConfiguration("yaw"),
         }],
     )
 
@@ -27,5 +29,6 @@ def generate_launch_description():
         spawn_x_arg,
         spawn_y_arg,
         spawn_z_arg,
+        spawn_yaw_arg,
         spawn_robot,
     ])
