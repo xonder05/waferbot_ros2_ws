@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.8)
 
 project(waferbot_rmf)
 
@@ -44,18 +44,16 @@ endforeach()
 install(PROGRAMS
   ${PROJECT_NAME}/fleet_adapter.py
   ${PROJECT_NAME}/robot_adapter.py
-  ${PROJECT_NAME}/relay.py
+  ${PROJECT_NAME}/mock_dispenser_ingestor.py
+  ${PROJECT_NAME}/rmf_visualization_fixer.py
+  ${PROJECT_NAME}/task_requester.py
+  ${PROJECT_NAME}/task_state_logger.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
-install(DIRECTORY
-  launch/
+install(
+  DIRECTORY launch config maps
   DESTINATION share/${PROJECT_NAME}
-)
-
-install(DIRECTORY
-  config/
-  DESTINATION share/${PROJECT_NAME}/config
 )
 
 ament_package()

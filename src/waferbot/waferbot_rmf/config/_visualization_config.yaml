@@ -1,0 +1,19 @@
+/**/navgraph_visualizer:
+  ros__parameters:
+    initial_map_name: "L1"
+    lane_width: 0.25
+    lane_transparency: 0.6
+    waypoint_scale: 1.0
+    text_scale: 1.0
+
+/**/schedule_visualizer_node:
+  ros__parameters:
+    rate: 10.0
+    path_width: 0.1
+
+/**/rmf_visualization_fixer:
+  ros__parameters:
+    origin_offset_x: 7.35
+    origin_offset_y: -11.75
+    schedule_marker_inner_size: 0.2
+    schedule_marker_outer_size: 0.0

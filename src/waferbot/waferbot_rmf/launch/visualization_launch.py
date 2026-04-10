@@ -12,10 +12,26 @@ def generate_launch_description():
     config_file_path = PathJoinSubstitution([
         FindPackageShare("waferbot_rmf"),
         "config",
-        "_rmf_visualization_fixer.yaml"
+        "_visualization_config.yaml"
     ])
 
-    visualization_fixer = Node(
+    navgraph = Node(
+        package="rmf_visualization_navgraphs",
+        executable="navgraph_visualizer_node",
+        parameters=[config_file_path, {
+            "use_sim_time": LaunchConfiguration("use_sim_time"),
+        }],
+    )
+
+    schedule = Node(
+        package="rmf_visualization_schedule",
+        executable="schedule_visualizer_node",
+        parameters=[config_file_path, {
+            "use_sim_time": LaunchConfiguration("use_sim_time"),
+        }],
+    )
+
+    fixer = Node(
         package="waferbot_rmf",
         executable="rmf_visualization_fixer.py",
         parameters=[config_file_path, {
@@ -25,5 +41,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         use_sim_time_arg,
-        visualization_fixer
+        navgraph,
+        schedule,
+        fixer
     ])

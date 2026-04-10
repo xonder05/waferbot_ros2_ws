@@ -16,15 +16,17 @@
 
 import rmf_adapter.easy_full_control as rmf_easy
 
+from rclpy.action import ActionClient
+from rclpy.time import Duration
+
 import tf2_ros
 
-import rclpy
-from rclpy.action import ActionClient
-from nav2_msgs.action import NavigateToPose
+from nav2_msgs.action import NavigateToPose, DockRobot
 from geometry_msgs.msg import PoseStamped
 from action_msgs.msg import GoalStatus
 
 import transforms3d
+
 
 class RobotUpdateData:
     ''' Update data for a single robot. '''
@@ -40,6 +42,7 @@ class RobotUpdateData:
         self.battery_soc = battery_soc
         self.requires_replan = requires_replan
 
+
 class TransformListener:
     def __init__(self, node, robot_name):
         self.node = node
@@ -47,10 +50,11 @@ class TransformListener:
         self.tf_listener = tf2_ros.TransformListener(self.tf_buffer, self.node)
         self.robot_name = robot_name
 
+
     def get_position(self):
 
         t = self.tf_buffer.lookup_transform(
-            "map", self.robot_name + "/base_link", rclpy.time.Time()
+            "map", self.robot_name + "/base_link", self.node.get_clock().now()- Duration(seconds=1.0)
         )
 
         x = t.transform.translation.x
@@ -68,13 +72,18 @@ class Nav2RobotAdapter:
         
         self.name = name
         self.execution = None
+        self.destination = None
+        self.queued_execution = None
+        self.queued_destination = None
         self.update_handle = None
         self.configuration = configuration
         self.node = node
         self.fleet_handle = fleet_handle
         self.tf = TransformListener(self.node, self.name)
-        self.action_cli = ActionClient(self.node, NavigateToPose, self.name + "/navigate_to_pose")
+        self.navigate_to_pose_client = ActionClient(self.node, NavigateToPose, self.name + "/navigate_to_pose")
+        self.dock_robot_client = ActionClient(self.node, DockRobot, self.name + "/dock_robot")
         self.navigate_timeout = None
+
 
     def get_data(self):
         
@@ -85,6 +94,7 @@ class Nav2RobotAdapter:
         if not (map is None or position is None or battery_soc is None):
             return RobotUpdateData(self.name, map, position, battery_soc)
         return None
+
 
     def update(self, state):
         activity_identifier = None
@@ -105,106 +115,164 @@ class Nav2RobotAdapter:
             )
         )
 
-        # callbacks.localize = lambda estimate, execution: self.localize(
-        #     estimate, execution
-        # )
-
         return callbacks
-
-    # def localize(self, estimate, execution):
-    #     self.node.get_logger().info(
-    #         f'Commanding [{self.name}] to change map to'
-    #         f' [{estimate.map}]'
-    #     )
-    #     if self.api.localize(self.name, estimate.position, estimate.map):
-    #         self.node.get_logger().info(
-    #             f'Localized [{self.name}] on {estimate.map} '
-    #             f'at position [{estimate.position}]'
-    #         )
-    #         execution.finished()
-    #     else:
-    #         self.node.get_logger().warn(
-    #             f'Failed to localize [{self.name}] on {estimate.map} '
-    #             f'at position [{estimate.position}]. Requesting replanning...'
-    #         )
-    #         if self.update_handle is not None and self.update_handle.more() is not None:
-    #             self.update_handle.more().replan()
 
 
     def navigate(self, destination, execution):
 
-        # self.node.get_logger().info(str(type(destination)))
-        # self.node.get_logger().info(str(dir(destination)))
+        self.queued_execution = execution
+        self.queued_destination = destination
 
-        # todo check destination.dock and if so command nav2 to dock there
+        if (self.execution is None and self.destination is None):
+            if (self.queued_destination.dock is None):
+                self.navigate_to_pose_request()
+            else:
+                self.dock_robot_request()
 
-        if self.execution is not None:
-            self.node.get_logger().info("Refusing navigation command because the previous one is still active")
-            return
 
-        self.node.get_logger().info(
-            f'Commanding [{self.name}] to navigate to {destination.position} '
-            f'on map [{destination.map}]'
-        )
+    def navigate_to_pose_request(self):
 
-        self.execution = execution
+        self.execution = self.queued_execution
+        self.queued_execution = None
+        self.destination = self.queued_destination
+        self.queued_destination = None
 
         goal_msg = NavigateToPose.Goal()
         goal_msg.pose = PoseStamped()
         goal_msg.pose.header.frame_id = "map"
         goal_msg.pose.header.stamp = self.node.get_clock().now().to_msg()
-
-        goal_msg.pose.pose.position.x = float(destination.position[0])
-        goal_msg.pose.pose.position.y = float(destination.position[1])
+        goal_msg.pose.pose.position.x = float(self.destination.position[0])
+        goal_msg.pose.pose.position.y = float(self.destination.position[1])
         goal_msg.pose.pose.position.z = 0.0
 
-        self.action_cli.wait_for_server()
+        self.navigate_to_pose_client.wait_for_server()
+        self.response_future = self.navigate_to_pose_client.send_goal_async(goal_msg)
+        self.response_future.add_done_callback(self.navigate_to_pose_response_callback)
 
-        self.navigate_goal_future = self.action_cli.send_goal_async(
-            goal_msg,
-            # feedback_callback=self.navigate_feedback_callback
-        )
-        self.navigate_goal_future.add_done_callback(self.navigate_goal_response_callback)
+        self.node.get_logger().info(f'Commanding [{self.name}] to navigate to {self.destination.position}')
 
 
-    def navigate_goal_response_callback(self, future):
+    def navigate_to_pose_response_callback(self, response_future):
 
-        self.goal_handle = future.result()
+        self.goal_handle = response_future.result()
+
         if self.goal_handle.accepted:
-            self.navigate_result_future = self.goal_handle.get_result_async()
-            self.navigate_result_future.add_done_callback(self.navigate_result_callback)
+            self.result_future = self.goal_handle.get_result_async()
+            self.result_future.add_done_callback(self.navigate_to_pose_result_callback)
+        
         else:
+            self.node.get_logger().info(f"[{self.name}] refused navigation request")
             self.execution.finished()
             self.execution = None
-            self.node.get_logger().info(f"Execution object nullified, goal refused")
 
 
-    # def navigate_feedback_callback(self, feedback_msg):
-    #     if self.navigate_timeout is None:
-    #         self.navigate_timeout = self.node.create_timer(1.0, self.stop)
-    #     else:
-    #         self.navigate_timeout.reset()
+    def navigate_to_pose_result_callback(self, result_future):
 
-
-    def navigate_result_callback(self, future):
-
-        result = future.result()
+        result = result_future.result()
 
         if result.status == GoalStatus.STATUS_SUCCEEDED:
+            self.node.get_logger().info(f"[{self.name}] successfully navigated to requested position")
             self.execution.finished()
-        else:
-            self.execution.finished()
+            self.execution = None
+            self.destination = None
 
-        self.execution = None
-        self.node.get_logger().info(f"Execution object nullified, result")
+        elif result.status == GoalStatus.STATUS_CANCELED:
+            self.node.get_logger().info(f"[{self.name}] navigation successfully canceled")
+            self.execution.finished()
+            self.execution = None
+            self.destination = None
+
+        else:
+            self.node.get_logger().info(f"[{self.name}] failed to navigate to requested position")
+            self.execution.finished()
+            self.execution = None
+            self.destination = None
+
+        if (self.queued_execution is not None and self.queued_destination is not None):
+            if (self.queued_destination.dock is None):
+                self.navigate_to_pose_request()
+            else:
+                self.dock_robot_request()
+
+
+    def dock_robot_request(self):
+
+        self.execution = self.queued_execution
+        self.queued_execution = None
+        self.destination = self.queued_destination
+        self.queued_destination = None
+
+        goal_msg = DockRobot.Goal()
+        goal_msg.use_dock_id = True
+        goal_msg.dock_id = self.destination.dock
+        goal_msg.dock_type = "simple"
+        goal_msg.navigate_to_staging_pose = True
+        goal_msg.max_staging_time = 60.0
+
+        self.dock_robot_client.wait_for_server()
+        self.response_future = self.dock_robot_client.send_goal_async(goal_msg)
+        self.response_future.add_done_callback(self.dock_robot_response_callback)
+
+        self.node.get_logger().info(f'Commanding [{self.name}] to dock at {self.destination.dock}')
+
+
+    def dock_robot_response_callback(self, response_future):
+
+        self.goal_handle = response_future.result()
+
+        if self.goal_handle.accepted:
+            self.result_future = self.goal_handle.get_result_async()
+            self.result_future.add_done_callback(self.dock_robot_result_callback)
+        
+        else:
+            self.node.get_logger().info(f"[{self.name}] refused docking request")
+            self.execution.finished()
+            self.execution = None
+
+
+    def dock_robot_result_callback(self, result_future):
+
+        result = result_future.result()
+
+        if result.status == GoalStatus.STATUS_SUCCEEDED:
+            self.node.get_logger().info(f"[{self.name}] successfully docked")
+            self.execution.finished()
+            self.execution = None
+            self.destination = None
+
+        elif result.status == GoalStatus.STATUS_CANCELED:
+            self.node.get_logger().info(f"[{self.name}] navigation successfully canceled")
+            self.execution.finished()
+            self.execution = None
+            self.destination = None
+
+        else:
+            self.node.get_logger().info(f"[{self.name}] failed to dock")
+            self.execution.finished()
+            self.execution = None
+            self.destination = None
+
+        if (self.queued_execution is not None and self.queued_destination is not None):
+            if (self.queued_destination.dock is None):
+                self.navigate_to_pose_request()
+            else:
+                self.dock_robot_request()
 
 
     def stop(self, activity):
-        execution = self.execution
-        if execution is not None:
-            if execution.identifier.is_same(activity):
-                if self.goal_handle is not None:
-                    self.goal_handle.cancel_goal_async()
+        if self.execution is not None:
+            if self.execution.identifier.is_same(activity):
+                self.cancel_goal_request()
+
+
+    def cancel_goal_request(self):
+        if self.goal_handle is not None:
+            self.response_future = self.goal_handle.cancel_goal_async()
+            self.response_future.add_done_callback(self.cancel_goal_response_callback)
+
+
+    def cancel_goal_response_callback(self, response_future):
+        result = response_future.result()
 
 
     def execute_action(self, category: str, description: dict, execution):
@@ -212,8 +280,7 @@ class Nav2RobotAdapter:
         You may wish to use RobotAPI.start_activity to trigger different
         types of actions to your robot.'''
         self.execution = execution
-        # ------------------------ #
-        # IMPLEMENT YOUR CODE HERE #
-        # ------------------------ #
+
+        self.node.get_logger().info(f"got action {category}, {description}, {execution}")
+
         return
-    
