@@ -74,6 +74,7 @@ def generate_launch_description():
 
         PushRosNamespace(LaunchConfiguration("robot_name")),
         SetParameter("use_sim_time", LaunchConfiguration("use_sim_time")),
+        SetParameter("bond_heartbeat_period", 1.0),
         SetRemap("/scan", "scan"),
         SetRemap("map", "/map"),
 
@@ -86,36 +87,28 @@ def generate_launch_description():
                     package="nav2_bt_navigator",
                     plugin="nav2_bt_navigator::BtNavigator",
                     name="bt_navigator",
-                    parameters=[namespaced_config_file, {
-                        "autostart_node": True,
-                    }],
+                    parameters=[namespaced_config_file],
                 ),
 
                 ComposableNode(
                     package="nav2_planner",
                     plugin="nav2_planner::PlannerServer",
                     name="planner_server",
-                    parameters=[namespaced_config_file, {
-                        "autostart_node": True,
-                    }],
+                    parameters=[namespaced_config_file],
                 ),
 
                 ComposableNode(
                     package="nav2_smoother",
                     plugin="nav2_smoother::SmootherServer",
                     name="smoother_server",
-                    parameters=[namespaced_config_file, {
-                        "autostart_node": True,
-                    }],
+                    parameters=[namespaced_config_file],
                 ),
 
                 ComposableNode(
                     package="nav2_controller",
                     plugin="nav2_controller::ControllerServer",
                     name="controller_server",
-                    parameters=[namespaced_config_file, {
-                        "autostart_node": True,
-                    }],
+                    parameters=[namespaced_config_file],
                     remappings=[("cmd_vel", "cmd_vel_nav")],
                 ),
 
@@ -123,9 +116,7 @@ def generate_launch_description():
                     package="nav2_velocity_smoother",
                     plugin="nav2_velocity_smoother::VelocitySmoother",
                     name="velocity_smoother",
-                    parameters=[namespaced_config_file, {
-                        "autostart_node": True,
-                    }],
+                    parameters=[namespaced_config_file],
                     remappings=[("cmd_vel", "cmd_vel_nav")],
                 ),
 
@@ -133,18 +124,14 @@ def generate_launch_description():
                     package="nav2_collision_monitor",
                     plugin="nav2_collision_monitor::CollisionMonitor",
                     name="collision_monitor",
-                    parameters=[namespaced_config_file, {
-                        "autostart_node": True,
-                    }],
+                    parameters=[namespaced_config_file],
                 ),
 
                 ComposableNode(
                     package="nav2_behaviors",
                     plugin="behavior_server::BehaviorServer",
                     name="behavior_server",
-                    parameters=[namespaced_config_file, {
-                        "autostart_node": True,
-                    }],
+                    parameters=[namespaced_config_file],
                     remappings=[("cmd_vel", "cmd_vel_nav")],
                 ),
 
@@ -152,10 +139,17 @@ def generate_launch_description():
                     package="opennav_docking",
                     plugin="opennav_docking::DockingServer",
                     name="docking_server",
-                    parameters=[namespaced_config_file, {
-                        "autostart_node": True,
-                    }],
+                    parameters=[namespaced_config_file],
                     remappings=[("cmd_vel", "diff_drive_controller/cmd_vel")],
+                ),
+
+                ComposableNode(
+                    package="nav2_lifecycle_manager",
+                    plugin="nav2_lifecycle_manager::LifecycleManager",
+                    name="lifecycle_manager_navigation",
+                    parameters=[
+                        {"autostart": True, "node_names": lifecycle_nodes}
+                    ],
                 ),
             ]
         )
