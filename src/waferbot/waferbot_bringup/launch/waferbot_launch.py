@@ -68,8 +68,8 @@ def generate_launch_description():
     y_robot_position_arg = DeclareLaunchArgument("y", default_value="0.0")
     z_robot_position_arg = DeclareLaunchArgument("z", default_value="0.0")
     yaw_robot_rotation_arg = DeclareLaunchArgument("yaw", default_value="0.0")
-    enable_odom_tf_arg = DeclareLaunchArgument("enable_odom_tf", default_value="false")
-    optimize_sim_perf_arg = DeclareLaunchArgument("optimize_sim_perf", default_value="False")
+    enable_odom_tf_arg = DeclareLaunchArgument("enable_odom_tf", default_value="True")
+    optimize_sim_perf_arg = DeclareLaunchArgument("optimize_sim_perf", default_value="True")
 
     targets_arg = DeclareLaunchArgument("targets", default_value="real", 
         description="Space separated list of launch targets. Allowed values are: real, sim, localization, live_mapping, static_map, navigation"
@@ -401,6 +401,8 @@ def generate_launch_description():
         y_robot_position_arg,
         z_robot_position_arg,
         yaw_robot_rotation_arg,
+        enable_odom_tf_arg,
+        optimize_sim_perf_arg,
         targets_arg,
 
         gazebo,

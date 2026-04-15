@@ -5,7 +5,7 @@ bt_navigator:
     odom_topic: diff_drive_controller/odom
     bt_loop_duration: 100
     default_server_timeout: 200
-    wait_for_service_timeout: 1000
+    wait_for_service_timeout: 2000
     action_server_result_timeout: 900.0
     navigators: ["navigate_to_pose", "navigate_through_poses"]
     navigate_to_pose:
@@ -57,8 +57,8 @@ global_costmap:
         map_topic: "/map"
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 10.0
-        inflation_radius: 0.5
+        cost_scaling_factor: 2.0
+        inflation_radius: 0.325
       always_send_full_costmap: True
 
 planner_server:
@@ -81,17 +81,6 @@ smoother_server:
       max_its: 1000
       do_refinement: True
 
-waypoint_follower:
-  ros__parameters:
-    loop_rate: 10
-    stop_on_failure: false
-    action_server_result_timeout: 900.0
-    waypoint_task_executor_plugin: "wait_at_waypoint"
-    wait_at_waypoint:
-      plugin: "nav2_waypoint_follower::WaitAtWaypoint"
-      enabled: True
-      waypoint_pause_duration: 200
-
 local_costmap:
   local_costmap:
     ros__parameters:
@@ -107,8 +96,8 @@ local_costmap:
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 10.0
-        inflation_radius: 0.25
+        cost_scaling_factor: 2.0
+        inflation_radius: 0.325
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
@@ -152,11 +141,20 @@ controller_server:
     goal_checker:
       plugin: "nav2_controller::SimpleGoalChecker"
       xy_goal_tolerance: 0.25
-      yaw_goal_tolerance: 6.28
+      yaw_goal_tolerance: 0.1963
       stateful: True
     # DWB controller parameters
     FollowPath:
-      plugin: "dwb_core::DWBLocalPlanner"
+      plugin: "nav2_rotation_shim_controller::RotationShimController"
+      angular_dist_threshold: 0.7853
+      forward_sampling_distance: 0.5
+      angular_disengage_threshold: 0.1963
+      rotate_to_heading_angular_vel: 2.5
+      max_angular_accel: 250.0
+      simulate_ahead_time: 1.0
+      rotate_to_goal_heading: true
+      
+      primary_controller: "dwb_core::DWBLocalPlanner"
       debug_trajectory_details: True
       min_vel_x: 0.0
       max_vel_x: 0.5
@@ -164,8 +162,8 @@ controller_server:
       max_vel_y: 0.0
       min_speed_xy: 0.3
       max_speed_xy: 0.5
-      min_speed_theta: 2.5
-      max_vel_theta: 4.5
+      min_speed_theta: 0.0
+      max_vel_theta: 2.5
       acc_lim_x: 30.0
       acc_lim_y: 0.0
       acc_lim_theta: 250.0
@@ -201,12 +199,12 @@ velocity_smoother:
     smoothing_frequency: 10.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [2.0, 0.0, 6.24]
-    min_velocity: [-2.0, 0.0, -6.24]
+    max_velocity: [0.5, 0.0, 6.24]
+    min_velocity: [-0.5, 0.0, -6.24]
     deadband_velocity: [0.0, 0.0, 0.0]
     velocity_timeout: 1.0
-    max_accel: [2.5, 0.0, 3.2]
-    max_decel: [-2.5, 0.0, -3.2]
+    max_accel: [30.0, 0.0, 250.0]
+    max_decel: [-30.0, 0.0, -250.0]
     odom_topic: "diff_drive_controller/odom"
     odom_duration: 0.1
     enable_stamped_cmd_vel: true
@@ -250,7 +248,7 @@ behavior_server:
     local_footprint_topic: local_costmap/published_footprint
     global_footprint_topic: global_costmap/published_footprint
     cycle_frequency: 10.0
-    transform_tolerance: 0.1
+    transform_tolerance: 0.2
     local_frame: odom
     global_frame: map
     robot_base_frame: base_link
@@ -359,7 +357,7 @@ docking_server:
       use_collision_detection: true
       costmap_topic: "local_costmap/costmap_raw"
       footprint_topic: "local_costmap/published_footprint"
-      transform_tolerance: 0.1
+      transform_tolerance: 0.2
       projection_time: 5.0
       simulation_step: 0.1
       dock_collision_threshold: 0.5
