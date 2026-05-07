@@ -117,21 +117,22 @@
 <!-- continuous or revolut joints, ros2_control uses these -->
 <xacro:macro name="accurators">
 
-    <xacro:cylinder_link name="left_wheel" mass="0.035" radius="0.0325" length="0.026"
+    <!-- mass hack on wheels, fixes odom drift, seems ode (gazebo physics engine) is not a fan of having two casters on one robot -->
+    <xacro:cylinder_link name="left_wheel" mass="10.035" radius="0.0325" length="0.026" friction="5.0"
                          origin_orientation="1.5708 0 0" use_collision="true"/>
     <xacro:continuous_joint name="left_motor_bracket_to_left_wheel" parent="left_motor_bracket" child="left_wheel"
                             origin_position="0.020 0.023 -0.020" axis="0 1 0"/>
 
-    <xacro:cylinder_link name="right_wheel" mass="0.035" radius="0.0325" length="0.026"
+    <xacro:cylinder_link name="right_wheel" mass="10.035" radius="0.0325" length="0.026" friction="5.0"
                          origin_orientation="1.5708 0 0" use_collision="true"/>
     <xacro:continuous_joint name="right_motor_bracket_to_right_wheel" parent="right_motor_bracket" child="right_wheel"
                             origin_position="-0.020 -0.023 -0.020" axis="0 1 0"/>
 
-    <xacro:ball_link name="front_caster_wheel" mass="0.010" radius="0.015" use_collision="true"/>
+    <xacro:ball_link name="front_caster_wheel" mass="0.010" radius="0.015" friction="0.01" use_collision="true"/>
     <xacro:fixed_joint name="front_caster_adapter_to_front_caster_wheel" parent="front_caster_adapter" child="front_caster_wheel"
                        origin_position="0 0 -0.035"/>
 
-    <xacro:ball_link name="back_caster_wheel" mass="0.010" radius="0.015" use_collision="true"/>
+    <xacro:ball_link name="back_caster_wheel" mass="0.010" radius="0.015" friction="0.01" use_collision="true"/>
     <xacro:fixed_joint name="back_caster_adapter_to_back_caster_wheel" parent="back_caster_adapter" child="back_caster_wheel"
                        origin_position="0 0 -0.035"/>
 

@@ -1,9 +1,9 @@
 /**/motion_executor_node:
   ros__parameters:
 
-    update_rate: 30
+    update_rate: 10
 
-    angular_goal_accuracy: 0.087 # rad
+    angular_goal_accuracy: 0.1963 # rad
     angular_decel_distance: 0.785 # rad
 
     min_angular_speed: 2.5 # rad/s

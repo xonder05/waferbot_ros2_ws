@@ -32,16 +32,15 @@ class UltrasonicInterpreter(Node):
         right = msg.ranges[2]
         distance = min(left, min(middle, right))
 
-        msg = Range()
-        msg.header.stamp = self.get_clock().now().to_msg()
-        msg.header.frame_id = "ultrasonic"
-        msg.radiation_type = 0 # [ULTRASOUND]
-        msg.field_of_view = 0.26179939 # [rad] (15°)
-        msg.min_range = 0.020 # [m]
-        msg.max_range = 4.0 # [m]
-        msg.range = distance
+        res = Range()
+        res.header = msg.header
+        res.radiation_type = 0 # [ULTRASOUND]
+        res.field_of_view = 0.26179939 # [rad] (15°)
+        res.min_range = 0.020 # [m]
+        res.max_range = 4.0 # [m]
+        res.range = distance if distance <= 4.0 else 4.0
 
-        self.range_publisher.publish(msg)
+        self.range_publisher.publish(res)
 
 def main():
     rclpy.init()

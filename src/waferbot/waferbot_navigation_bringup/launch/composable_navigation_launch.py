@@ -1,6 +1,6 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, SetEnvironmentVariable
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression
 
 from launch_ros.actions import Node, PushRosNamespace, SetParameter, SetRemap, LoadComposableNodes, ComposableNodeContainer
 from launch_ros.substitutions import FindPackageShare
@@ -16,7 +16,7 @@ def generate_launch_description():
     config_file_path = PathJoinSubstitution([
         FindPackageShare("waferbot_navigation_bringup"),
         "config",
-        "_navigation.yaml"
+        ["_navigation_", PythonExpression([f"'sim' if '", LaunchConfiguration("use_sim_time"), "' == 'true' else 'real'"]), ".yaml"]
     ])
 
     param_substitutions = {

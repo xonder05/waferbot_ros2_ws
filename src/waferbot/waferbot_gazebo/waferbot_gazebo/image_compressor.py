@@ -30,9 +30,11 @@ class ImageCompressor(Node):
         
         #parse image data into 3D numpy array, encode it as .jpg and send it via compressed image
         np_array = np.frombuffer(msg.data, dtype=np.uint8).reshape((msg.height, msg.width, 3))
+        bgr_np_array = cv2.cvtColor(np_array, cv2.COLOR_RGB2BGR)
+
         compressed_image_msg = CompressedImage()
         compressed_image_msg.format = "jpeg"
-        compressed_image_msg.data = cv2.imencode('.jpg', np_array)[1].tobytes()
+        compressed_image_msg.data = cv2.imencode('.jpg', bgr_np_array)[1].tobytes()
         self.publisher.publish(compressed_image_msg)
 
 def main():

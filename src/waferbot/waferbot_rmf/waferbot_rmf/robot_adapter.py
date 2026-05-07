@@ -144,6 +144,11 @@ class Nav2RobotAdapter:
         goal_msg.pose.pose.position.x = float(self.destination.position[0])
         goal_msg.pose.pose.position.y = float(self.destination.position[1])
         goal_msg.pose.pose.position.z = 0.0
+        q_w, q_x, q_y, q_z = transforms3d.euler.euler2quat(0.0, 0.0, self.destination.position[2])
+        goal_msg.pose.pose.orientation.w = q_w
+        goal_msg.pose.pose.orientation.x = q_x
+        goal_msg.pose.pose.orientation.y = q_y
+        goal_msg.pose.pose.orientation.z = q_z
 
         self.navigate_to_pose_client.wait_for_server()
         self.response_future = self.navigate_to_pose_client.send_goal_async(goal_msg)
