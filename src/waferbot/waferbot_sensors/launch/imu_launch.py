@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: imu_launch.py
+Description: Starts up imu_node.
+Author: Daniel Onderka (xonder05)
+Date: 09/2025
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution

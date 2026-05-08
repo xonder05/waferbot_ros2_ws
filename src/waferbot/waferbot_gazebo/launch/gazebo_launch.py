@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: gazebo_launch.py
+Description: Starts Gazebo simulator, picks world file, sets up container for bridges.
+Author: Daniel Onderka (xonder05)
+Date: 10/2025
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution

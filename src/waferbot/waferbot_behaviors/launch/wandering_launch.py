@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: wandering_launch.py
+Description: Launch file for simple fuzzy based wandering node.
+Author: Daniel Onderka (xonder05)
+Date: 11/2025
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution

@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: visualization_launch.py
+Description: Stats up RMF visualization nodes, and fixer from this package.
+Author: Daniel Onderka (xonder05)
+Date: 03/2026
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution

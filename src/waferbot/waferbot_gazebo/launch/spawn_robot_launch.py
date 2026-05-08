@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: spawn_robot_launch.py
+Description: Spawns robot from robot_description topic into running Gazebo simulator.
+Author: Daniel Onderka (xonder05)
+Date: 10/2025
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration

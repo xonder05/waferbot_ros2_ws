@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: ydlidar_launch.py
+Description: Starts up ydlidar_ros2_driver_node from package ydlidar_ros2_driver provided in the /lib folder.
+Author: Daniel Onderka (xonder05)
+Date: 09/2025
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution

@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: helpers_launch.py
+Description: Higher launch file including ultrasonic_interpreter and image_compressor.
+Author: Daniel Onderka (xonder05)
+Date: 10/2025
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution

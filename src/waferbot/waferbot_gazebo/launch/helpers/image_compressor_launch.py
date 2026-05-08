@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: image_compressor_launch.py
+Description: Starts helper node for simulator.
+Author: Daniel Onderka (xonder05)
+Date: 10/2025
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution

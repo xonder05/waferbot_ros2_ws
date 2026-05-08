@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: robot_state_publisher_launch.py
+Description: Translates and publishes robot_description.
+Author: Daniel Onderka (xonder05)
+Date: 08/2025
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command

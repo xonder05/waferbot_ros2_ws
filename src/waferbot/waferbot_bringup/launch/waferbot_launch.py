@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: waferbot_launch.py
+Description: Main launch file to start up the entire robot. Provides targets argument to select which parts of the system will be started.
+Author: Daniel Onderka (xonder05)
+Date: 01/2026
+"""
+
 import sys
 
 from launch import LaunchDescription

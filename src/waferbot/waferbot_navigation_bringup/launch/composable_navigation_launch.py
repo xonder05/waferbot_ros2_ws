@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: composable_navigation_launch.py
+Description: Launch file for entire Nav2 navigation stack, uses node composition for better performance.
+Author: Daniel Onderka (xonder05)
+Date: 03/2026
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, SetEnvironmentVariable
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression

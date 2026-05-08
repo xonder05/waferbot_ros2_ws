@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: rmf_launch.py
+Description: Main launch file for RMF system. Starts up both system nodes as well as custom robot_adapter and helper node.
+Author: Daniel Onderka (xonder05)
+Date: 03/2026
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution

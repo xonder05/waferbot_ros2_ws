@@ -1,8 +1,15 @@
+#!/usr/bin/env python3
+"""
+Filename: bridges_launch.py
+Description: Adds bridge node to existing container. 
+Author: Daniel Onderka (xonder05)
+Date: 10/2025
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
-from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 from ros_gz_bridge.actions import RosGzBridge

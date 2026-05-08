@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: navigation_launch.py
+Description: Launch file for entire Nav2 navigation stack.
+Author: Daniel Onderka (xonder05)
+Date: 10/2025
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, SetEnvironmentVariable
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution

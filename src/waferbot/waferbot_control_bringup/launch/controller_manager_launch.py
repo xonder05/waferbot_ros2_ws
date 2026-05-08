@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: controller_manager_launch.py
+Description: Launch file for ros2_control's controller_manager node.
+Author: Daniel Onderka (xonder05)
+Date: 10/2025
+"""
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
