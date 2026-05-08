@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: imu_node.py
+Description: Reads accelerometer and gyroscope data using mpu6050 module.
+Author: Daniel Onderka (xonder05)
+Date: 09/2025
+"""
+
 import rclpy
 from rclpy.node import Node
 

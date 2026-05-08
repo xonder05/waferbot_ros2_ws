@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Filename: task_state_logger.py
+Description: Helper nodes logging current state of RMF tasks into console.
+Author: Daniel Onderka (xonder05)
+Date: 03/2026
+"""
 
 import json
 

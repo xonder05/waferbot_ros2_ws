@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+"""
+Filename: wandering_node.py
+Description: 
+    Simple wandering using single ultrasonic sensor. Node makes 5 measurements in +- 45 degrees in front of robot.
+    Than passes values to fuzzy inference. Output is three values. Action (drive or spin) and how much for each.
+    Movement is performed using helper motion_executor_node. 
+Author: Daniel Onderka (xonder05)
+Date: 11/2025
+"""
+
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionClient

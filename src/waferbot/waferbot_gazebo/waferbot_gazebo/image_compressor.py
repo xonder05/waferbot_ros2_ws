@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: image_compressor.py
+Description: Converts messages of type Image to type CompressedImage.
+Author: Daniel Onderka (xonder05)
+Date: 10/2025
+"""
+
 import rclpy
 from rclpy.node import Node
 

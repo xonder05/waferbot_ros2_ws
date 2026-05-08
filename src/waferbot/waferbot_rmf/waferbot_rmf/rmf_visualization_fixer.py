@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+"""
+Filename: rmf_visualization_fixer.py
+Description: 
+    Helper node for fixing RMF visualization nodes. 
+    Handles alignment with slam map. Adds some purely visual parameters the original nodes are missing.
+Author: Daniel Onderka (xonder05)
+Date: 03/2026
+"""
 
 import rclpy
 from rclpy.node import Node

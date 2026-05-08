@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: camera_node.py
+Description: Reads camera images using picamera2 module that is a wrapper for libcamera library.
+Author: Daniel Onderka (xonder05)
+Date: 09/2025
+"""
+
 import rclpy
 from rclpy.node import Node
 

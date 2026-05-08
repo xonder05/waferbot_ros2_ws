@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+"""
+Filename: motion_executor_node.py
+Description: 
+    Performs accurate movement. Provides two action servers, drive and spin. 
+    Listens to /tf topic to be able to precisly hit the goal. Supports correction in case of overshoot.
+Author: Daniel Onderka (xonder05)
+Date: 11/2025
+"""
+
 import math
 
 import rclpy

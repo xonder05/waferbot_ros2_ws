@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+"""
+Filename: task_requester.py
+Description: 
+    Generates task request JSON messages in proper format from just a small amount of necessary input parameters.
+    Sends those tasks to dispatcher and waits for response.
+Author: Daniel Onderka (xonder05)
+Date: 03/2026
+"""
 
 import uuid, json
 

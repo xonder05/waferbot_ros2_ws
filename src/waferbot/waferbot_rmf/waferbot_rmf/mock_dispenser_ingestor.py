@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Filename: mock_dispenser_ingestor.py
+Description: Mock dispenser and ingestor requests from RMF. Immediately responds with success. 
+Author: Daniel Onderka (xonder05)
+Date: 03/2026
+"""
 
 import rclpy
 from rclpy.node import Node

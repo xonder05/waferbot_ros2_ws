@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: ultrasonic_node.py
+Description: Controls ultrasonic sensor using pigpio library.
+Author: Daniel Onderka (xonder05)
+Date: 09/2025
+"""
+
 import time
 
 import rclpy

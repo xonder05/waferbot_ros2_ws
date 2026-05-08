@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+Filename: ultrasonic_interpreter.py
+Description: Converts messages of type Scan to type Range. Takes the lowest measurement from Scan.
+Author: Daniel Onderka (xonder05)
+Date: 10/2025
+"""
+
 import rclpy
 from rclpy.node import Node
 
