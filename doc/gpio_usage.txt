@@ -1,0 +1,41 @@
+GPIO Usage Adeept Robot Hat
+
+0
+1
+2 MPU IIC PWMGen
+3 MPU IIC PWMGen
+4 L298P
+5 Switch Led
+6 Switch Led
+7
+8 Ultrasonic
+9
+10
+11 Ultrasonic
+12 WS2821
+13 Switch Led
+14 UART
+15 UART
+16 Tracking
+17 L298P
+18 L298P
+19 Tracking
+20 Tracking
+21 L298P
+22
+23
+24
+25
+26 L298P
+27 L298P
+
+Encoders:
+22, 23, 24, 25
+and some 3.3V and GND
+
+Encoder tics per rotation
+4935 / 10
+4940 / 10
+
+4940 / 10
+4933 / 10

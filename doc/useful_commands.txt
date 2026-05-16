@@ -1,0 +1,40 @@
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -p stamped:=true
+
+ros2 topic pub /forward_command_controller/commands std_msgs/msg/Float64MultiArray "{layout:{dim: [], data_offset: 0}, data: [45]}" -1
+
+ros2 service call /waferbot/slam_toolbox/serialize_map slam_toolbox/srv/SerializePoseGraph "{filename: './my_map1'}"
+
+ros2 action send_goal /waferbot1/dock_robot nav2_msgs/action/DockRobot '{
+  use_dock_id: true,
+  dock_id: "waferbot6",
+  dock_type: "simple",
+  navigate_to_staging_pose: true,
+  max_staging_time: 60.0
+}'
+
+ros2 topic pub /task_api_requests rmf_task_msgs/msg/ApiRequest "{
+  request_id: 'delivery_test_2',
+  json_msg: '{
+    \"type\": \"dispatch_task_request\",
+    \"request\": {
+      \"category\": \"delivery\",
+      \"unix_millis_earliest_start_time\": 0,
+      \"description\": {
+        \"pickup\": {
+          \"place\": \"office1\",
+          \"handler\": \"mock_dispenser\",
+          \"payload\": [
+            {\"sku\": \"item\", \"quantity\": 1}
+          ]
+        },
+        \"dropoff\": {
+          \"place\": \"office2\",
+          \"handler\": \"mock_ingestor\",
+          \"payload\": [
+            {\"sku\": \"item\", \"quantity\": 1}
+          ]
+        }
+      }
+    }
+  }'
+}" --qos-reliability reliable --qos-durability transient_local --qos-history keep_last --qos-depth 1 -1

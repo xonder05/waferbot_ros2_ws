@@ -1,0 +1,71 @@
+// gazebo with different number of robots spawned
+empty warehouse - 38
+1 wb - 85
+2 wb - 107
+3 wb - 128
+4 wb - 146
+5 wb - 169
+6 wb - 181
+
+// result: lowered physics loop speed in .sdf, now 90 percent with 6 robots
+// total relative sim to real is now almost 99 percent
+
+// empty warehouse 15
+// warehouse with 1 wb 35
+
+// gazebo process with different numbers of gz_bridge nodes running
+6 wb - 90
+1 gzb - 99
+2 gzb - 101
+3 gzb - 102
+4 gzb - 108
+5 gzb - 108
+6 gzb - 109
++ 3-4 percent per bridge node
+
+// result: put all bridges in one gz_bridge parameter_bridge node
+1 gzb for everything - 105
++ 4-5 percent for bridge node
+
+// ros2 control
+base on gz sim - 133
+1 dd - 135
+2 dd - 139
+3 dd - 140
+4 dd - 144
+5 dd - 146
+6 dd - 149
+
+1 fc - 150
+2 fc - 151
+3 fc - 153
+4 fc - 154
+5 fc - 156
+6 fc - 158
+
+6 js - 175 
+
+// result: controller frequency lowered to 10 hz, total after all controllers spawned is 159
+// second baseline 144, 6dd 153, 6fc 161, 6 js  174
+// result, probably not worth it
+
+// robot_localization
+6.7 at 30 hz
+6.7 at 10 hz
+
+// map server 4 with 6 amcls (seems to not matter how many amcls there are)
+// amcl 7 idle, 10 driving 11.2 when driving and losing
+// amcl 6 idle, 8 driving 10 when driving and losing
+
+// nav2 stack
+// planner 13
+// bt navigator 13
+// controller 12-13 idle, 25 navigating
+// behavior 11
+
+// composable 60
+// individual 66.7, 78,4
+
+// composable no lifecycle 35 passive
+// composable basic lifecycle 58 passive
+// composable slow lifecycle 42 passive
