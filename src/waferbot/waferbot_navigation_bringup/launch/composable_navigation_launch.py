@@ -8,9 +8,9 @@ Date: 03/2026
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, SetEnvironmentVariable
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
-from launch_ros.actions import Node, PushRosNamespace, SetParameter, SetRemap, LoadComposableNodes, ComposableNodeContainer
+from launch_ros.actions import PushRosNamespace, SetParameter, SetRemap, LoadComposableNodes, ComposableNodeContainer
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.descriptions import ParameterFile, ComposableNode
 
@@ -24,7 +24,7 @@ def generate_launch_description():
     config_file_path = PathJoinSubstitution([
         FindPackageShare("waferbot_navigation_bringup"),
         "config",
-        ["_navigation_", PythonExpression([f"'sim' if '", LaunchConfiguration("use_sim_time"), "' == 'true' else 'real'"]), ".yaml"]
+        "_navigation_sim.yaml"
     ])
 
     param_substitutions = {
@@ -155,9 +155,10 @@ def generate_launch_description():
                     package="nav2_lifecycle_manager",
                     plugin="nav2_lifecycle_manager::LifecycleManager",
                     name="lifecycle_manager_navigation",
-                    parameters=[
-                        {"autostart": True, "node_names": lifecycle_nodes}
-                    ],
+                    parameters=[{
+                        "autostart": True, 
+                        "node_names": lifecycle_nodes
+                    }],
                 ),
             ]
         )

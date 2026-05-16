@@ -140,19 +140,19 @@ controller_server:
       movement_time_allowance: 10.0
     goal_checker:
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.15
+      xy_goal_tolerance: 0.2
       yaw_goal_tolerance: 0.1963
       stateful: True
     # DWB controller parameters
     FollowPath:
       plugin: "nav2_rotation_shim_controller::RotationShimController"
       angular_dist_threshold: 0.7853
-      forward_sampling_distance: 0.25 # align this with goal tolerance?
-      angular_disengage_threshold: 0.1963
+      forward_sampling_distance: 0.2 # align this with goal tolerance?
+      angular_disengage_threshold: 0.3926
       rotate_to_heading_angular_vel: 3.0
       max_angular_accel: 250.0
       simulate_ahead_time: 1.0
-      rotate_to_goal_heading: false
+      rotate_to_goal_heading: true
       
       primary_controller: "dwb_core::DWBLocalPlanner"
       debug_trajectory_details: True
@@ -177,7 +177,7 @@ controller_server:
       linear_granularity: 0.05
       angular_granularity: 0.025
       transform_tolerance: 0.2
-      xy_goal_tolerance: 0.15
+      xy_goal_tolerance: 0.2
       trans_stopped_velocity: 0.25
       short_circuit_trajectory_evaluation: True
       limit_vel_cmd_in_traj: False
@@ -270,4 +270,3 @@ behavior_server:
     max_rotational_vel: 6.4
     min_rotational_vel: 2.5
     rotational_acc_lim: 3.2
-

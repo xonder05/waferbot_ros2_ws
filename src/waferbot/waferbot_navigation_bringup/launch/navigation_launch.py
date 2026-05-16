@@ -24,7 +24,7 @@ def generate_launch_description():
     config_file_path = PathJoinSubstitution([
         FindPackageShare("waferbot_navigation_bringup"),
         "config",
-        "_navigation.yaml"
+        "_navigation_real.yaml"
     ])
 
     param_substitutions = {
@@ -41,9 +41,6 @@ def generate_launch_description():
         
         "behavior_server.ros__parameters.local_frame": [LaunchConfiguration("robot_name"), "/odom"],
         "behavior_server.ros__parameters.robot_base_frame": [LaunchConfiguration("robot_name"), "/base_link"],
-    
-        "docking_server.ros__parameters.base_frame": [LaunchConfiguration("robot_name"), "/base_link"],
-        "docking_server.ros__parameters.fixed_frame": [LaunchConfiguration("robot_name"), "/odom"],
     }
 
     namespaced_config_file = ParameterFile(
@@ -67,20 +64,15 @@ def generate_launch_description():
         "velocity_smoother",
         "collision_monitor",
         "behavior_server",
-        "docking_server",
     ]
 
     navigation = GroupAction([
+
         PushRosNamespace(LaunchConfiguration("robot_name")),
         SetParameter("use_sim_time", LaunchConfiguration("use_sim_time")),
+        SetParameter("bond_heartbeat_period", 1.0),
         SetRemap("/scan", "scan"),
         SetRemap("map", "/map"),
-
-        Node(
-            package="nav2_lifecycle_manager",
-            executable="lifecycle_manager",
-            parameters=[{"autostart": True}, {"node_names": lifecycle_nodes}],
-        ),
 
         Node(
             package="nav2_bt_navigator",
@@ -128,12 +120,12 @@ def generate_launch_description():
         ),
 
         Node(
-            package="opennav_docking",
-            executable="opennav_docking",
-            name="docking_server",
-            output="screen",
-            parameters=[namespaced_config_file],
-            remappings=[("cmd_vel", "diff_drive_controller/cmd_vel")],
+            package="nav2_lifecycle_manager",
+            executable="lifecycle_manager",
+            parameters=[{
+                "autostart": True, 
+                "node_names": lifecycle_nodes
+            }],
         ),
     ])
 
