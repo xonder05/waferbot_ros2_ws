@@ -12,7 +12,7 @@ setup(
         ("share/ament_index/resource_index/packages", [f"resource/{package_name}"]),
         (f"share/{package_name}", ["package.xml"]),
         (f"share/{package_name}/launch", glob(f"launch/*_launch.py")),
-        (f"share/{package_name}/config", glob(f"config/*_.yaml")),
+        (f"share/{package_name}/config", glob(f"config/*.yaml")),
     ],
     install_requires=["setuptools"],
     zip_safe=True,
