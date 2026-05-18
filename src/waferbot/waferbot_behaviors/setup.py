@@ -21,11 +21,6 @@ setup(
     maintainer_email='daniel.onderk@gmail.com',
     description='TODO: Package description',
     license='Apache-2.0',
-    extras_require={
-        'test': [
-            'pytest',
-        ],
-    },
     entry_points={
         'console_scripts': [
             "motion_executor_node = waferbot_behaviors.motion_executor_node:main",
