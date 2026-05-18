@@ -1,3 +1,8 @@
+<!-- 
+@file wandering_world.xacro
+@author Daniel Onderka (xonder05)
+-->
+
 <sdf version="1.9">
   <world name="wandering">
     
