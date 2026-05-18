@@ -10,13 +10,10 @@ import rclpy
 from rclpy.node import Node
 
 from sensor_msgs.msg import CompressedImage
-from sensor_msgs.msg import Image
-
-from picamera2.picamera2 import Picamera2
-from picamera2.encoders import H264Encoder
 
 import cv2
-import numpy as np
+from picamera2.picamera2 import Picamera2
+from picamera2.encoders import H264Encoder
 
 class CameraNode(Node):
     def __init__(self):

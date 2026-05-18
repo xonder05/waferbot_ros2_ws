@@ -11,7 +11,6 @@ import time
 import rclpy
 from rclpy.node import Node
 
-from std_msgs.msg import Header
 from sensor_msgs.msg import Range
 
 import pigpio

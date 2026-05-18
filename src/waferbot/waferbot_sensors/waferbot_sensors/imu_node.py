@@ -9,7 +9,6 @@ Date: 09/2025
 import rclpy
 from rclpy.node import Node
 
-from geometry_msgs.msg import Vector3
 from sensor_msgs.msg import Imu
 
 import math
