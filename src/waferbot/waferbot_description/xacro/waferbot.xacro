@@ -1,10 +1,11 @@
+<?xml version="1.0"?>
+
 <!-- 
 @file waferbot.xacro
 @author Daniel Onderka (xonder05)
 @date 08/2025
 -->
 
-<?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="$(arg robot_name)">
 
     <xacro:arg name="robot_name" default="waferbot"/>

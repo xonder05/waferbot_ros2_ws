@@ -1,10 +1,11 @@
+<?xml version="1.0"?>
+
 <!-- 
 @file ros2_control_plugins.xacro
 @author Daniel Onderka (xonder05)
 @date 08/2025
 -->
 
-<?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 <xacro:macro name="ros2_control_diffdrive_plugin">

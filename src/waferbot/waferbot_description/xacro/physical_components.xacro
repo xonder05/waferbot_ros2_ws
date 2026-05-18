@@ -1,10 +1,11 @@
+<?xml version="1.0"?>
+
 <!-- 
 @file physical_components.xacro
 @author Daniel Onderka (xonder05)
 @date 08/2025
 -->
 
-<?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
 
 <!-- orp baseplates and adapters, all with fixed joints -->

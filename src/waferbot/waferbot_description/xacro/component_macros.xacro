@@ -1,10 +1,11 @@
+<?xml version="1.0"?>
+
 <!-- 
 @file component_macros.xacro
 @author Daniel Onderka (xonder05)
 @date 08/2025
 -->
 
-<?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
 <!-- basic building blocks -->
