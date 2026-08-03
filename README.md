@@ -1,48 +1,37 @@
 # WaferBot
+WaferBot is a diffdrive robot. It is capable of autonomous mapping and navigation using LIDAR. 
+The software is built on top of ROS2 framework. Resulting system can control both real and simulated version of the robot.
+Multi robot coordination is supported in simulator.
 
 ## Dependencies
 - [ROS2 Jazzy](https://docs.ros.org/en/jazzy/index.html)
 - [ros2_control](https://control.ros.org/jazzy/index.html)
+- [Gazebo](https://gazebosim.org/home)
 - [slam_toolbox](https://github.com/SteveMacenski/slam_toolbox)
 - [Nav2](https://docs.nav2.org/index.html)
+- [OpenRMF](https://www.open-rmf.org/)
 
-## Instalation
-Make sure to clone using `--recurse-submodules` since 
-this repository depends on other ROS2 packages, that you can find in the `src/lib` folder.
+## Installation
+Make sure to clone using `--recurse-submodules`. This repository depends on other packages. You can find them in the `src/lib` folder.
 
-If you have all the dependencies than you should be able to just clone the workspace, build with 
-`colcon build` (don't forget to source) and run with 
-`ros2 launch waferbot_bringup waferbot_launch.py`.
+If you have all of the previously listed dependencies, you should be able to just clone this workspace, build with 
+`colcon build` (don't forget to source the workspace afterwards) and run with `ros2 launch waferbot_bringup waferbot_launch.py`.
 
 ## Documentation
-
-### waferbot_behaviors
-Implements two nodes for map less movement.
-
-**Motion executor** provides two action servers for drive 
-and spin behavior. Listens to transformation topic and 
-handles loop closure.
-
-`ros2 launch waferbot_behaviors motion_executor_launch.py`
-
-**Wandering node** implements fuzzy based wandering. 
-Depends on motion executor for movement. Sends commands 
-to servo and listens to ultrasonic measurements.
-
-`ros2 launch waferbot_behaviors wandering_launch.py`
+This documentation is now outdated, but still useful for understanding general structure of the repository.
 
 ### waferbot_bringup
 This is the main package to bringup the entire robot 
 at once. 
 
-**waferbot_lauhch.py** is a top level launch file
+**waferbot_launch.py** is a top level launch file
 for starting the entire robot. Its most important 
 argument is `targets`.
 Using it you can select which parts of the stack will 
 be started. Options are `real`, `sim`, `localization`, `wandering`, `static_map`, `live_mapping` and `navigation`. 
 The argument can take any number of these in any order separated by spaces (except for real and simulation, wandering and navigation, those are exclusive, also note that navigation / wandering will not work without localization).
 
-`ros2 launch waferbot_bringup waferobot_launch.py targets:="real localization live_mapping navigation"`
+`ros2 launch waferbot_bringup waferbot_launch.py targets:="real localization live_mapping navigation"`
 
 **real_robot_launch.py** connects low level launch files
 from sensors and control packages together. It is being used by the top level waferbot_launch.py file. You can of course use this directly, just take into account you 
@@ -57,6 +46,21 @@ need to have robot_state_publisher running, otherwise this launch will fail.
 **rviz_launch.py** is pretty self explanatory. This file starts up rviz with one of two prepared configuration files.
 
 `ros2 launch waferbot_bringup rviz_launch.py config_file:=[single_robot|multi_robot]`
+
+### waferbot_behaviors
+Implements two nodes for mapless movement.
+
+**Motion executor** provides two action servers for drive 
+and spin behavior. Listens to transformation topic and 
+handles loop closure.
+
+`ros2 launch waferbot_behaviors motion_executor_launch.py`
+
+**Wandering node** implements fuzzy based wandering. 
+Depends on motion executor for movement. Sends commands 
+to servo and listens to ultrasonic measurements.
+
+`ros2 launch waferbot_behaviors wandering_launch.py`
 
 ### waferbot_control_bringup
 This package handles starting ros2_control.
@@ -82,7 +86,7 @@ This package contains everything needed to run waferbot model in simulator.
 
 **spawn_robot_launch.py** spawns robot, whose description it gets from topic, into running simulator.
 
-`ros2 launch waferbot_gazebo spanw_robot_launch.py`
+`ros2 launch waferbot_gazebo spawn_robot_launch.py`
 
 **bridges_launch.py** using `ros_gz_bridge` package start bridge that translates messages between gazebo transport and ros2.
 
@@ -91,7 +95,7 @@ This package contains everything needed to run waferbot model in simulator.
 Last but not least, this package contains implementation of two helper nodes. They can be started individually or together.  
 
 `ros2 launch waferbot_gazebo image_compressor_launch.py` \
-`ros2 launch waferbot_gazebo ultrasonic_interpreted_launch.py` \
+`ros2 launch waferbot_gazebo ultrasonic_interpreter_launch.py` \
 `ros2 launch waferbot_gazebo helpers_launch.py`
 
 ### waferbot_localization_bringup
